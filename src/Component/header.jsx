@@ -5,7 +5,7 @@ function Header() {
     return(
         <React.Fragment>
             <h1>Ini adalah header</h1>
-            <Page/>
+            <Page />
         </React.Fragment>
     )
 }
