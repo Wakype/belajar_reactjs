@@ -1,0 +1,15 @@
+.header {
+  text-align: center;
+}
+.identitas {
+  padding: 20px 30px;
+  border: 1px solid blue;
+  width: 100px;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+}
