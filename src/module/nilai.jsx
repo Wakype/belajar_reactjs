@@ -14,6 +14,7 @@ export default function Nilai({ nama, data }) {
           <li>{data[2]}</li>
           <li>{data[3]}</li>
           <li>{data[4]}</li> */}
+          
           {data?.map((item, index) => {
             return (
               <li>
