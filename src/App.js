@@ -36,9 +36,9 @@ function App() {
   return (
     <React.Fragment>
       <h1 style={{ textAlign: "center" }}>Latihan1</h1>
-      <h1>Data produk di Indonesia</h1>
+      <h1 style={{ textAlign: "center" }}>Data produk di Indonesia</h1>
 
-      <DataProduk produk={produk} className="produk"/>
+      <DataProduk produk={produk}/>
     </React.Fragment>
   );
 }
