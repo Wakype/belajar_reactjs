@@ -3,36 +3,55 @@ import "./style/style.css";
 import Layout from "./komponen/layout";
 import Button from "./komponen/button";
 
-function App() {
-  return (
-    <React.Fragment>
-      <h1 style={{ textAlign: "center" }}>Belajar Props 2</h1>
-      <Layout title={"Nomor 1"}>
-        <h1>SMK Madinatul Qur'an</h1>
-      </Layout>
-      <Layout title={"Nomor 2"}>
-        <h1>SMK IDN</h1>
-      </Layout>
-      <Layout title={"Nomor 3"}>
-        <h1>SMA Negri 130 Jakarta</h1>
-      </Layout>
+export default function App() {
+  let [name, setName] = React.useState('')
+  let [email, setEmail] = React.useState('')
+  let [password, setPassword] = React.useState('')
+  let [confirmPassword, setConfirmPassword] = React.useState('')
 
-      <Button
-        onClick={() => {
-          console.log("button Simpan di klik");
-        }}
-        color="blue"
-        title={"Simpan"}
-      />
-      <Button
-        onClick={() => {
-          console.log("button Batal di klik");
-        }}
-        title={"Batal"}
-      />
-      <Button color="green" title={"update"} />
+  return(
+    <React.Fragment>
+      <form>tes</form>
     </React.Fragment>
-  );
+  )
 }
 
-export default App;
+
+
+
+// function App() {
+//   let [count, setCount] = React.useState(0);
+//   const handleTambah = () => {
+//     setCount(count + 1);
+//   };
+//   const handleKurang = () => {
+//     setCount(count - 1);
+//   };
+//   return (
+//     <React.Fragment>
+//       <h1 style={{ textAlign: "center" }}>Belajar State</h1>
+//       <div className="container">
+//         <div>
+//           <h1> Count = {count}</h1>
+//           <Button onClick={handleTambah} title="Tambah" color="blue" />
+//           <Button
+//             disabled={count <= 0 ? true : false}
+//             onClick={handleKurang}
+//             title="Kurang"
+//             color="green"
+//           />
+//           <Button
+//           disabled={count === 0 ? true : false}
+//             onClick={() => {
+//               setCount(0);
+//             }}
+//             title="Reset"
+//             color="red"
+//           />
+//         </div>
+//       </div>
+//     </React.Fragment>
+//   );
+// }
+
+// export default App;

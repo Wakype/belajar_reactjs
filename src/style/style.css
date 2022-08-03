@@ -1,7 +1,18 @@
+.container {
+    margin: auto;
+    width: 500px;
+    border: 1px solid black;
+    padding: 20px;
+    /* margin-top: 100px; */
+    border-radius: 10px;
+}
+.container h1 {
+    text-align: center;
+}
 .layout {
     border: 1px solid black;
     margin: 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 10px;
     display: flex;
     justify-content: space-between;
@@ -9,7 +20,7 @@
 .button {
     color: white;
     margin: 0px 10px;
-    padding: 10px 20px;
+    padding: 10px 50px;
     border: 1px solid grey;
     border-radius: 2px;
     cursor: pointer;
