@@ -1,7 +1,44 @@
 .produk {
-    border: 1px solid black;
+    border: 1px solid #A66CFF;
+    background-color: #9c9efe7c;
 }
-
 section {
     text-align: center;
+    border: 2px solid #A66CFF;
+    background-color: #9c9efe7c;
+    padding: 30px;
+    width: 500px;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+.brand {
+    border: 2px solid #A66CFF;
+    background-color: #9c9efe7c;
+    border-radius: 5px;
+}
+.brand1 {
+    border: 2px solid #A66CFF;
+    background-color: #9c9efe7c;
+    border-radius: 5px;
+    margin: 15px;
+}
+.brand2 {
+    border: 2px solid #A66CFF;
+    background-color: #9c9efe7c;
+    border-radius: 5px;
+    margin: 15px;
+}
+.tipe {
+    border: 2px solid #A66CFF;
+    background-color: #9c9efe7c;
+    border-radius: 5px;
+    padding: 5px;
+}
+.jenis {
+    border: 2px solid #A66CFF;
+    background-color: #9c9efe7c;
+    border-radius: 5px;
+    padding: 5px;
 }
