@@ -3,6 +3,7 @@ import "./style/style.css";
 import Layout from "./komponen/layout";
 import Button from "./komponen/button";
 import Input from "./komponen/input";
+import Card from "./komponen/card";
 
 export default function App() {
   const [values, setValues] = React.useState({
@@ -11,10 +12,13 @@ export default function App() {
     password: "",
     confirmPassword: "",
   });
+  const [data, setData] = React.useState([]);
+  const [error, setError] = React.useState({});
 
   const handleChange = (e) => {
     console.log("apa aja");
     e.preventDefault();
+
     setValues((values) => {
       return {
         ...values,
@@ -22,12 +26,55 @@ export default function App() {
       };
     });
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("form tersubmit");
+
+    values.id = new Date().getTime();
+
+    // setValues(() => {
+    //   return {
+    //     username: "",
+    //     email: "",
+    //     password: "",
+    //     confirmPassword: "",
+    //   };
+    // });
+
+    setData((data) => {
+      return [...data, values];
+    });
+    // setData((data) => [...data, values]);
+  };
+  const handleBlur = (e) => {
+    console.log("blur coyy");
+    e.preventDefault();
+
+    if (e.target.value === "") {
+      setError((error) => {
+        return {
+          ...error,
+          [e.target.name]: true,
+        };
+      });
+    }
+    if (e.target.value !== "") {
+      setError((error) => {
+        return {
+          ...error,
+          [e.target.name]: false,
+        };
+      });
+    }
+  };
+
+  console.log("errors", error);
   return (
     <React.Fragment>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
         <div>
-          <form>
-            <Input
+          <form onSubmit={handleSubmit}>
+            {/* <Input
               name="username"
               value={values.username}
               label={"Username"}
@@ -42,6 +89,23 @@ export default function App() {
                   };
                 });
               }}
+            /> */}
+            <h1
+              style={{
+                textAlign: "center",
+                margin: "10px 0px",
+                fontFamily: "VALORANT",
+              }}
+            >
+              LOGIN
+            </h1>
+            <Input
+              name="username"
+              value={values.username}
+              label={"Username"}
+              placeholder="Username"
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
             <Input
               name="email"
@@ -49,6 +113,7 @@ export default function App() {
               label={"Email"}
               placeholder="Email"
               onChange={handleChange}
+              onBlur={handleBlur}
             />
             <Input
               name="password"
@@ -56,6 +121,7 @@ export default function App() {
               label={"Password"}
               placeholder="Password"
               onChange={handleChange}
+              onBlur={handleBlur}
             />
             <Input
               name="confirmPassword"
@@ -63,17 +129,24 @@ export default function App() {
               label={"Confirm Password"}
               placeholder="Confirm Password"
               onChange={handleChange}
+              onBlur={handleBlur}
+              isError={error?.confirmPassword}
+              textError={"wajib disii"}
             />
             <div style={{ margin: "auto", width: "200px" }}>
               <Button title={"simpan"} />
             </div>
           </form>
         </div>
+        <div className="garis"></div>
         <div>
-          <p>Username: {values?.username}</p>
-          <p>Email: {values?.email}</p>
-          <p>Password: {values?.password}</p>
-          <p>Confirm Password: {values?.confirmPassword}</p>
+          <Card data={data} value={values} setData={setData} />
+          {/* <div>
+            <p>Username: {values.username}</p>
+            <p>Email: {values.email}</p>
+            <p>Password: {values.password}</p>
+            <p>Confirm Password: {values.confirmPassword}</p>
+          </div> */}
         </div>
       </div>
     </React.Fragment>

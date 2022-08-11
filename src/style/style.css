@@ -50,9 +50,31 @@ form {
   width: 500px;
   /* height: 200px; */
   /* margin: auto; */
-  margin: 70px 0px 0px 0px;
+  margin: 50px 0px 0px 0px;
   background-color: #5A8F7B;
   border-radius: 5px;
   border: 1px solid #355764;
   padding: 30px 0px;
+}
+.card {
+  border: 1px solid #377D71;
+  background-color: #C4DFAA;
+  margin-top: 50px;
+  margin-bottom: 10px;
+  padding: 30px;
+  border-radius: 5px;
+}
+.card h3 {
+  text-align: center;
+  margin: 5px 0px;
+  border: 1px solid #18978F;
+  background-color: #54BAB9;
+  border-radius: 5px;
+  font-family: 'umeboshi';
+  padding: 5px;
+}
+.garis {
+  border: 1px solid black;
+  /* height: 100vh; */
+
 }
