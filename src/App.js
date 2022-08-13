@@ -3,12 +3,17 @@ import "./style/style.css";
 import Layout from "./komponen/layout";
 import Button from "./komponen/button";
 import Input from "./komponen/input";
+import InputDate from "./komponen/inputDate";
 import Card from "./komponen/card";
+import InputKelamin from "./komponen/inputKelamin";
 
 export default function App() {
   const [values, setValues] = React.useState({
     username: "",
     email: "",
+    tempatLahir: "",
+    tanggalLahir: "",
+    jenisKelamin: "",
     password: "",
     confirmPassword: "",
   });
@@ -16,7 +21,6 @@ export default function App() {
   const [error, setError] = React.useState({});
 
   const handleChange = (e) => {
-    console.log("apa aja");
     e.preventDefault();
 
     setValues((values) => {
@@ -26,29 +30,74 @@ export default function App() {
       };
     });
   };
+  const handleReset = (e) => {
+    e.preventDefault();
+    setValues(() => {
+      return {
+        username: "",
+        email: "",
+        tempatLahir: "",
+        tanggalLahir: "",
+        jenisKelamin: "",
+        password: "",
+        confirmPassword: "",
+      };
+    });
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("form tersubmit");
 
     values.id = new Date().getTime();
 
-    // setValues(() => {
-    //   return {
-    //     username: "",
-    //     email: "",
-    //     password: "",
-    //     confirmPassword: "",
-    //   };
-    // });
+    if (values.username === "") {
+      alert('isi username dengan benar')
+      return 
+    }
+    if (values.email === "") {
+      alert('isi email dengan benar')
+      return 
+    }
+    if (values.tempatLahir === "") {
+      alert('isi tempat lahir dengan benar')
+      return 
+    }
+    if (values.tanggalLahir === "") {
+      alert('isi tanggal lahir dengan benar')
+      return 
+    }
+    if (values.password === "") {
+      alert('isi password dengan benar')
+      return 
+    }
+    if (values.confirmPassword === "") {
+      alert('isi password dengan benar')
+      return 
+    }
 
-    setData((data) => {
-      return [...data, values];
+
+    setValues(() => {
+      return {
+        username: "",
+        email: "",
+        tempatLahir: "",
+        tanggalLahir: "",
+        jenisKelamin: "",
+        password: "",
+        confirmPassword: "",
+      };
     });
-    // setData((data) => [...data, values]);
+
+    // setData((data) => {
+    //   return [...data, values];
+    // });
+    setData((data) => [...data, values]);
   };
   const handleBlur = (e) => {
-    console.log("blur coyy");
     e.preventDefault();
+
+    if (values.confirmPassword !== values.password) {
+      return false
+    }
 
     if (e.target.value === "") {
       setError((error) => {
@@ -68,28 +117,11 @@ export default function App() {
     }
   };
 
-  console.log("errors", error);
   return (
     <React.Fragment>
       <div style={{ display: "flex", justifyContent: "space-evenly" }}>
         <div>
           <form onSubmit={handleSubmit}>
-            {/* <Input
-              name="username"
-              value={values.username}
-              label={"Username"}
-              placeholder="Username"
-              onChange={(event) => {
-                event.preventDefault();
-                console.log(event);
-                setValues(() => {
-                  return {
-                    ...values,
-                    username: event.target.value,
-                  };
-                });
-              }}
-            /> */}
             <h1
               style={{
                 textAlign: "center",
@@ -102,16 +134,47 @@ export default function App() {
             <Input
               name="username"
               value={values.username}
-              label={"Username"}
-              placeholder="Username"
+              label={"Nama"}
+              placeholder="Nama"
               onChange={handleChange}
               onBlur={handleBlur}
+              isError={error?.username}
+              textError={"wajib disii"}
             />
             <Input
               name="email"
               value={values.email}
               label={"Email"}
               placeholder="Email"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              isError={error?.email}
+              textError={"wajib disii"}
+            />
+            <Input
+              name="tempatLahir"
+              value={values.tempatLahir}
+              label={"Tempat lahir"}
+              placeholder="Tempat lahir"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              isError={error?.tempatLahir}
+              textError={"wajib disii"}
+            />
+            <InputDate
+              type="date"
+              name="tanggalLahir"
+              value={values.tanggalLahir}
+              label={"Tanggal lahir"}
+              placeholder="Tanggal lahir"
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <InputKelamin
+              name="jenisKelamin"
+              value={values.jenisKelamin}
+              label={"Jenis kelamin"}
+              placeholder="Jenis kelamin"
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -122,6 +185,8 @@ export default function App() {
               placeholder="Password"
               onChange={handleChange}
               onBlur={handleBlur}
+              isError={error?.password}
+              textError={"wajib disii"}
             />
             <Input
               name="confirmPassword"
@@ -133,14 +198,32 @@ export default function App() {
               isError={error?.confirmPassword}
               textError={"wajib disii"}
             />
-            <div style={{ margin: "auto", width: "200px" }}>
-              <Button title={"simpan"} />
+            <div style={{display: 'flex', justifyContent: "center"}}>
+              <div style={{ margin: "auto" }}>
+                <button
+                  className="button"
+                  title={"Reset"}
+                  type="button"
+                  onClick={handleReset}
+                  style={{ backgroundColor: "red" }}
+                >
+                  Reset
+                </button>
+              </div>
+              <div style={{ margin: "auto" }}>
+                <Button title={"Simpan"} />
+              </div>
             </div>
           </form>
         </div>
         <div className="garis"></div>
         <div>
-          <Card data={data} value={values} setData={setData} />
+          <Card
+            data={data}
+            value={values}
+            setValue={setValues}
+            setData={setData}
+          />
           {/* <div>
             <p>Username: {values.username}</p>
             <p>Email: {values.email}</p>
@@ -152,40 +235,3 @@ export default function App() {
     </React.Fragment>
   );
 }
-
-// function App() {
-//   let [count, setCount] = React.useState(0);
-//   const handleTambah = () => {
-//     setCount(count + 1);
-//   };
-//   const handleKurang = () => {
-//     setCount(count - 1);
-//   };
-//   return (
-//     <React.Fragment>
-//       <h1 style={{ textAlign: "center" }}>Belajar State</h1>
-//       <div className="container">
-//         <div>
-//           <h1> Count = {count}</h1>
-//           <Button onClick={handleTambah} title="Tambah" color="blue" />
-//           <Button
-//             disabled={count <= 0 ? true : false}
-//             onClick={handleKurang}
-//             title="Kurang"
-//             color="green"
-//           />
-//           <Button
-//           disabled={count === 0 ? true : false}
-//             onClick={() => {
-//               setCount(0);
-//             }}
-//             title="Reset"
-//             color="red"
-//           />
-//         </div>
-//       </div>
-//     </React.Fragment>
-//   );
-// }
-
-// export default App;
