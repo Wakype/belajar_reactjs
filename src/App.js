@@ -49,6 +49,11 @@ export default function App() {
 
     values.id = new Date().getTime();
 
+    if (values.password !== values.confirmPassword) {
+      alert('password harus sama')
+      return
+    }
+
     if (values.username === "") {
       alert('isi username dengan benar')
       return 
