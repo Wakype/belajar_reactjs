@@ -10,6 +10,12 @@ import Profile from "./setting/profile";
 import Lenovo from "./setting/computer/lenovo";
 import Asus from "./setting/computer/asus";
 import Hp from "./setting/computer/hp";
+import Login from "./main/login";
+import Register from "./main/register";
+import Admin from "./main/admin/admin";
+import Dashboard from "./main/admin/dashboard";
+import Kelas from "./main/admin/kelas";
+import User from "./main/admin/user";
 
 export {
     About,
@@ -24,4 +30,10 @@ export {
     Lenovo,
     Asus,
     Hp,
+    Login,
+    Register,
+    Admin,
+    User,
+    Kelas,
+    Dashboard,
 }

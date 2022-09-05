@@ -12,7 +12,7 @@ export default function Home({ label }) {
 
   return (
     <div>
-      <h1>ini home</h1>
+      <h1>ini Home</h1>
         <button className="border border-green-500 rounded py-2 px-4 mt-3">{label}</button>
         {msg}
         <button className="border border-green-500 rounded py-2 px-4 mt-3" onClick={handleLogin}>Login</button>

@@ -14,6 +14,12 @@ import {
   Lenovo,
   Asus,
   Hp,
+  Login,
+  Register,
+  Admin,
+  User,
+  Kelas,
+  Dashboard,
 } from "./pages";
 
 function App() {
@@ -25,7 +31,7 @@ function App() {
         <Link to={'/setting'}>Setting</Link>
         <Link to={'/about'}>About</Link> */}
           <NavLink
-            to={"/"}
+            to={"login"}
             style={({ isActive }) => (isActive ? { color: "red" } : undefined)}
             className=""
           >
@@ -46,7 +52,11 @@ function App() {
         </section>
         <section className="">
           <Routes>
-            <Route path="/" element={<Home label={"klik ini"} />} />
+            <Route path="login" element={<Login/>} />
+            <Route path="register" element={<Register/>} />
+            <Route path="admin/dashboard" element={<Admin/>} >
+
+            </Route>
             <Route path="/palabapa" element={<Setting />}>
               <Route path="profile" element={<Profile />} />
               <Route path="phone" element={<Phone />} />
@@ -61,7 +71,7 @@ function App() {
             <Route path="about/:id/:nama/" element={<Detail2 />} />
             <Route path="/error404" element={<NotFound />} />
             <Route path="/home" element={<Navigate to="/" replace />} />
-            <Route path="*" element={<Navigate to="/error404" replace />} />
+            <Route path="*" element={<Navigate to="login" replace />} />
           </Routes>
         </section>
       </section>
