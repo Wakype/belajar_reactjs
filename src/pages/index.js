@@ -7,6 +7,9 @@ import Setting from "./setting";
 import Computer from "./setting/computer";
 import Phone from "./setting/phone";
 import Profile from "./setting/profile";
+import Lenovo from "./setting/computer/lenovo";
+import Asus from "./setting/computer/asus";
+import Hp from "./setting/computer/hp";
 
 export {
     About,
@@ -18,4 +21,7 @@ export {
     Phone,
     Profile,
     NotFound,
+    Lenovo,
+    Asus,
+    Hp,
 }
