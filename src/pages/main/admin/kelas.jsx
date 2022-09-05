@@ -2,8 +2,8 @@ import React from 'react'
 
 const Kelas = () => {
   return (
-    <div>
-      
+    <div className="w-[1166px] text-center font-bold uppercase text-2xl">
+      Kelas Page
     </div>
   )
 }
