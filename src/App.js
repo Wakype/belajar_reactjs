@@ -4,10 +4,14 @@ import {
   Login,
   Register,
   Admin,
-  User,
-  Kelas,
+  Buku,
+  About,
   Dashboard,
-  UserDetail
+  UserDetail,
+  TambahBuku,
+  UpdateBuku,
+  DetailBuku,
+  NotFound,
 } from "./pages";
 
 
@@ -17,15 +21,17 @@ function App() {
       <section className="flex">
         <section className="">
           <Routes>
-            <Route path="login" element={<Login/>} />
-            <Route path="register" element={<Register/>} />
+            <Route path="home" element={<Login/>} />
             <Route path="/admin" element={<Admin/>} >
               <Route path='dashboard' element={<Dashboard/>}/>
-              <Route path='user' element={<User/>}/>
-              <Route path='user/:nama/:kelas/' element={<UserDetail/>}/>
-              <Route path='kelas' element={<Kelas/>}/>
+              <Route path='buku' element={<Buku/>}/>
+              <Route path='buku/tambah' element={<TambahBuku/>}/>
+              <Route path='buku/:id/update' element={<UpdateBuku/>}/>
+              <Route path='buku/:id/view' element={<DetailBuku/>}/>
+              <Route path='about' element={<About/>}/>
             </Route>
-            <Route path="*" element={<Navigate to="login" replace />} />
+            <Route path='notFound' element={<NotFound/>}/>
+            <Route path="*" element={<Navigate to="notFound" replace={true} />} />
           </Routes>
         </section>
       </section>

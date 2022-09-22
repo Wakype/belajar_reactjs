@@ -1,20 +1,22 @@
 
 import NotFound from "./notFound";  
 import Login from "./main/login";
-import Register from "./main/register";
 import Admin from "./main/admin/admin";
 import Dashboard from "./main/admin/dashboard";
-import Kelas from "./main/admin/kelas";
-import User from "./main/admin/user";
-import UserDetail from "./main/admin/userDetail";
+import About from "./main/admin/about";
+import Buku from "./main/admin/buku";
+import TambahBuku from "./main/admin/tambahBuku";
+import UpdateBuku from "./main/admin/updateBuku";
+import DetailBuku from "./main/admin/detailBuku";
 
 export {
     NotFound,
     Login,
-    Register,
     Admin,
-    User,
-    Kelas,
+    Buku,
+    About,
     Dashboard,
-    UserDetail,
+    TambahBuku,
+    UpdateBuku,
+    DetailBuku,
 }
