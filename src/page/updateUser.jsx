@@ -1,10 +1,11 @@
 import React from "react";
 import { Button, Input, InputStateEvent, Select } from "../component";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-const CreateUser = () => {
+const UpdateUser = () => {
   const navigate = useNavigate();
+  let { id } = useParams();
   const [user, setUser] = React.useState({
     username: "",
     name: "",
@@ -31,17 +32,42 @@ const CreateUser = () => {
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "https://belajar-react.smkmadinatulquran.sch.id/api/users/create",
-        user
-      );
+        const response = await axios.put(
+          `https://belajar-react.smkmadinatulquran.sch.id/api/users/update/${id}`,
+          user
+        );
       setIsLoading(false);
       return navigate("/user");
     } catch (err) {
       console.log(err);
       setIsLoading(false);
+      //   alert('salah! kelamin harus "laki-laki".');
     }
   };
+
+  const getDetailUser = async (id) => {
+    try {
+      const response = await axios.get(
+        `https://belajar-react.smkmadinatulquran.sch.id/api/users/detail/${id}`
+      );
+
+      console.log(response.data.data);
+      const dataUser = response.data.data;
+
+      setUser(() => {
+        return {
+            username: dataUser.username,
+            name: dataUser.name,
+            jenis_kelamin: dataUser.jenis_kelamin,
+            email: dataUser.email,
+        }
+      })
+    } catch (err) {}
+  };
+
+  React.useEffect(() => {
+    getDetailUser(id);
+  }, []);
   return (
     <section className="bg-purple-900 h-[633px]">
       <div>
@@ -76,30 +102,18 @@ const CreateUser = () => {
               onChange={handleChange}
             />
             <Select
+              id=""
               name={"jenis_kelamin"}
               placeholder="Jenis Kelamin"
               label={"Jenis Kelamin"}
               value={user.jenis_kelamin}
               onChange={handleChange}
             >
-              <option value={user.jenis_kelamin}>laki-laki</option>
-              <option value="">perempuan</option>
+              <option value="laki-laki">laki-laki</option>
+              <option value="perempuan">perempuan</option>
             </Select>
-            <InputStateEvent
-              name={"password"}
-              placeholder="Password"
-              label={"Password"}
-              value={user.password}
-              onChange={handleChange}
-            />
-            <InputStateEvent
-              name={"password_confimation"}
-              placeholder="Confirm Password"
-              label={"Confirm Password"}
-              value={user.password_confimation}
-              onChange={handleChange}
-            />
-            <div className="flex flex-row justify-between">
+
+            <div className="flex flex-row justify-between mb-2">
               <button
                 className="button border border-green-500 rounded px-3 py-1 my-1 hover:bg-green-500 transition-all ease-in-out hover:text-white"
                 onClick={() => {
@@ -108,7 +122,10 @@ const CreateUser = () => {
               >
                 Back
               </button>
-              <Button title={isLoading ? "Sedang Menyimpan" : "Simpan"} />
+              <Button
+                title={isLoading ? "Sedang Mengupdate" : "Update"}
+                className=""
+              />
             </div>
           </div>
         </form>
@@ -117,4 +134,4 @@ const CreateUser = () => {
   );
 };
 
-export default CreateUser;
+export default UpdateUser;
