@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Input, InputStateEvent, Select } from "../component";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const UpdateUser = () => {
   const navigate = useNavigate();
@@ -37,6 +38,22 @@ const UpdateUser = () => {
           user
         );
       setIsLoading(false);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: "User berhasil di Delete!",
+      });
       return navigate("/user");
     } catch (err) {
       console.log(err);

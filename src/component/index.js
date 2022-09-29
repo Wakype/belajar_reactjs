@@ -1,3 +1,4 @@
+import 'react-loading-skeleton/dist/skeleton.css'
 import Input from "./input";
 import InputStateEvent from "./komponen/inputState_Event";
 import Button from "./komponen/button";

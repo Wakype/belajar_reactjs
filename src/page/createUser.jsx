@@ -14,6 +14,8 @@ const CreateUser = () => {
     password_confimation: "",
   });
   const [isLoading, setIsLoading] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [error, setError] = React.useState({});
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -38,6 +40,8 @@ const CreateUser = () => {
       setIsLoading(false);
       return navigate("/user");
     } catch (err) {
+      setErrorMessage('Terjadi kesalahan')
+      setError(err?.response?.data?.errors)
       console.log(err);
       setIsLoading(false);
     }
@@ -54,6 +58,9 @@ const CreateUser = () => {
             <div className="text-center text-xl font-semibold my-3">
               <h1>Buat User</h1>
             </div>
+            <div className="text-center my-3 text-red-500 italic">
+              <p>{errorMessage}</p>
+            </div>
             <InputStateEvent
               name={"username"}
               placeholder="Username"
@@ -61,6 +68,7 @@ const CreateUser = () => {
               value={user.username}
               onChange={handleChange}
             />
+            <p className="text-red-500 italic text-[15px]">{error?.username?.[0]}</p>
             <InputStateEvent
               name={"name"}
               placeholder="Nama"
@@ -68,6 +76,7 @@ const CreateUser = () => {
               value={user.name}
               onChange={handleChange}
             />
+            <p className="text-red-500 italic text-[15px]">{error?.name?.[0]}</p>
             <InputStateEvent
               name={"email"}
               placeholder="Email"
@@ -75,6 +84,7 @@ const CreateUser = () => {
               value={user.email}
               onChange={handleChange}
             />
+            <p className="text-red-500 italic text-[15px]">{error?.email?.[0]}</p>
             <Select
               name={"jenis_kelamin"}
               placeholder="Jenis Kelamin"
@@ -82,9 +92,11 @@ const CreateUser = () => {
               value={user.jenis_kelamin}
               onChange={handleChange}
             >
-              <option value={user.jenis_kelamin}>laki-laki</option>
-              <option value="">perempuan</option>
+              <option value="Pilih Kelamin">Pilih Kelamin</option>
+              <option value="laki-laki">laki-laki</option>
+              <option value="perempuan">perempuan</option>
             </Select>
+            <p className="text-red-500 italic text-[15px]">{error?.jenis_kelamin?.[0]}</p>
             <InputStateEvent
               name={"password"}
               placeholder="Password"
@@ -92,6 +104,7 @@ const CreateUser = () => {
               value={user.password}
               onChange={handleChange}
             />
+            <p className="text-red-500 italic text-[15px]">{error?.password?.[0]}</p>
             <InputStateEvent
               name={"password_confimation"}
               placeholder="Confirm Password"
