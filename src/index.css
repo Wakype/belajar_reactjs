@@ -1,3 +1,9 @@
+:root {
+  --chakra-shadows-buttonRaised: 12px 12px 0 #06283D
+}
+
+@import url('http://fonts.cdnfonts.com/css/kongtext');
+@import url('http://fonts.cdnfonts.com/css/noto-sans-balinese');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,4 +20,15 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.font8bit {
+  font-family: 'Kongtext', sans-serif;         
+}
+.noto {
+  font-family: 'Noto Sans Balinese', sans-serif;
+}
+
+.form {
+  box-shadow: var(--chakra-shadows-buttonRaised);
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Input, InputStateEvent, Select } from "../component";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { getAllUser, createUser } from "../API/user";
 
 const CreateUser = () => {
   const navigate = useNavigate();
@@ -33,10 +34,7 @@ const CreateUser = () => {
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "https://belajar-react.smkmadinatulquran.sch.id/api/users/create",
-        user
-      );
+      const response = await createUser(user);
       setIsLoading(false);
       return navigate("/user");
     } catch (err) {
@@ -47,7 +45,7 @@ const CreateUser = () => {
     }
   };
   return (
-    <section className="bg-purple-900 h-[633px]">
+    <section className="bg-purple-900">
       <div>
         <form
           action=""
