@@ -1,4 +1,4 @@
-import axios from "./baseUrlLogin";
+import axios from "../baseUrl2";
 
 export async function LoginProses(payload) {
     return axios.post(`/login`, payload)

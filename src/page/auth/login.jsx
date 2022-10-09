@@ -2,18 +2,21 @@ import React from "react";
 import Cookies from "js-cookie";
 import { Button, InputStateEvent } from "../../component";
 import { useNavigate } from "react-router-dom";
-import { LoginProses } from "../../API/login";
+import { LoginProses } from "../../API/login_API/login";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 const Login = () => {
   let navigate = useNavigate();
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
   const [payload, setPayload] = React.useState({
     email: "",
     password: "",
   });
 
   const handleChange = (e) => {
+    setIsError(false);
     setPayload((payload) => {
       return {
         ...payload,
@@ -31,7 +34,7 @@ const Login = () => {
       const data = response.data;
       Cookies.set("myapps_token", data?.token);
 
-      return navigate("/user", { replace: true });
+      return navigate("/artikel", { replace: true });
     } catch (err) {
       console.log("error =>", err);
     } finally {
@@ -39,13 +42,6 @@ const Login = () => {
     }
 
     console.log("submit =>", payload);
-
-    setPayload(() => {
-      return {
-        email: "",
-        password: "",
-      };
-    });
   };
 
   return (
@@ -67,6 +63,8 @@ const Login = () => {
               placeholder="Email"
               label={"Email"}
               type="email"
+              isError={isError}
+              textError="input salah"
             />
             <InputStateEvent
               onChange={handleChange}
@@ -79,7 +77,13 @@ const Login = () => {
             <div className="flex justify-end">
               <Button
                 edit={"px-5"}
-                title={isLoading ? "Logging" : "Login"}
+                title={
+                  isLoading ? (
+                    <ScaleLoader color="#36d7b7" height={12} width={2} />
+                  ) : (
+                    "Login"
+                  )
+                }
                 type="submit"
                 onClick={() => {
                   // Cookies.set("myapps_token", "ini isi token");

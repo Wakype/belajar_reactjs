@@ -1,4 +1,4 @@
-import axios from "./baseUrl";
+import axios from "../baseUrl";
 
 export async function getAllUser(pageSize) {
     return axios.get(`/users/${pageSize}`)

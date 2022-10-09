@@ -4,7 +4,7 @@ import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { Button } from "../component";
 import Swal from "sweetalert2";
 import Skeleton from "react-loading-skeleton";
-import { getAllUser, deleteUsers } from "../API/user";
+import { getAllUser, deleteUsers } from "../API/user_API/user";
 import Cookies from "js-cookie";
 
 const User = () => {

@@ -6,7 +6,7 @@ const ProtectRoute = ({ children }) => {
   const auth = Cookies.get("myapps_token");
   console.log("auth =>", auth);
 
-  return auth !== undefined ? children : <Navigate to="/login" />;
+  return auth !== undefined ? children : <Navigate to="/artikel" />;
 };
 
 export default ProtectRoute;

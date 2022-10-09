@@ -1,7 +1,8 @@
 import React from "react";
 
-export default function InputStateEvent({
+export default function UploadInput({
   label,
+  edit,
   isError,
   textError,
   ...props
@@ -16,7 +17,7 @@ export default function InputStateEvent({
 
       <input
         {...props}
-        className="input-text border border-green-500 rounded w-[300px] py-[5px] hover:border-1 transition-all ease-in-out hover:border-green-800 bg-transparent"
+        className={`${edit} cursor-pointer border-green-500 rounded  py-[5px] transition-all ease-in-out bg-transparent`}
         id={label}
       />
       {isError && <p className="error border-red-500 rounded text-red-500 italic">{textError}</p>}

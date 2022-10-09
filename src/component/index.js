@@ -5,6 +5,7 @@ import Button from "./komponen/button";
 import Card from "./komponen/card";
 import Layout from "./komponen/layout";
 import Select from "./komponen/select";
+import UploadInput from './komponen/uploadInput';
 
 export {
     Input,
@@ -13,4 +14,5 @@ export {
     Card,
     Layout,
     Select,
+    UploadInput,
 }

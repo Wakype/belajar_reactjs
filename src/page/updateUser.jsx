@@ -3,7 +3,7 @@ import { Button, Input, InputStateEvent, Select } from "../component";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { updateUser, detailUser } from "../API/user";
+import { updateUser, detailUser } from "../API/user_API/user";
 
 const UpdateUser = () => {
   const navigate = useNavigate();
@@ -27,6 +27,24 @@ const UpdateUser = () => {
         [e.target.name]: e.target.value,
       };
     });
+  };
+
+  const getDetailUser = async (id) => {
+    try {
+      const response = await detailUser(id);
+
+      console.log(response.data.data);
+      const dataUser = response.data.data;
+
+      setUser(() => {
+        return {
+          username: dataUser.username,
+          name: dataUser.name,
+          jenis_kelamin: dataUser.jenis_kelamin,
+          email: dataUser.email,
+        };
+      });
+    } catch (err) {}
   };
 
   const handleSubmit = async (e) => {
@@ -58,24 +76,6 @@ const UpdateUser = () => {
       setIsLoading(false);
       //   alert('salah! kelamin harus "laki-laki".');
     }
-  };
-
-  const getDetailUser = async (id) => {
-    try {
-      const response = await detailUser(id);
-
-      console.log(response.data.data);
-      const dataUser = response.data.data;
-
-      setUser(() => {
-        return {
-          username: dataUser.username,
-          name: dataUser.name,
-          jenis_kelamin: dataUser.jenis_kelamin,
-          email: dataUser.email,
-        };
-      });
-    } catch (err) {}
   };
 
   React.useEffect(() => {

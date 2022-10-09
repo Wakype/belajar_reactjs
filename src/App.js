@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { User, DetailUser, CreateUser, UpdateUser } from "./page";
+import { User, DetailUser, CreateUser, UpdateUser, Artikel, CreateArtikel, DetailArtikel, UpdateArtikel } from "./page";
 import { Input, Select } from "./component";
 import ProtectRoute from "./routers/protectRoute";
 import Login from "./page/auth/login";
@@ -22,6 +22,38 @@ function App() {
           element={
             <ProtectRoute>
               <User />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/artikel"
+          element={
+            <ProtectRoute>
+              <Artikel />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/artikel/create"
+          element={
+            <ProtectRoute>
+              <CreateArtikel />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/artikel/update/:id/:slug"
+          element={
+            <ProtectRoute>
+              <UpdateArtikel />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/artikel/detail/:slug"
+          element={
+            <ProtectRoute>
+              <DetailArtikel />
             </ProtectRoute>
           }
         />
@@ -49,7 +81,7 @@ function App() {
             </ProtectRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/user" replace={true} />} />
+        <Route path="*" element={<Navigate to="/login" replace={true} />} />
       </Routes>
     </React.Fragment>
   );

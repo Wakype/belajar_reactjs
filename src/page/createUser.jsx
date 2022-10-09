@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Input, InputStateEvent, Select } from "../component";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getAllUser, createUser } from "../API/user";
+import { getAllUser, createUser } from "../API/user_API/user";
 
 const CreateUser = () => {
   const navigate = useNavigate();
