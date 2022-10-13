@@ -1,12 +1,13 @@
-import React from "react"
-
+import React from "react";
+import { Home, PakIhsan } from "./page";
 
 function App() {
-  return(
+  return (
     <React.Fragment>
-      <h1 style={{textAlign: 'center'}} className="bg-red-500 text-white">Branch Main</h1>
+      <PakIhsan/>
+      {/* <Home/> */}
     </React.Fragment>
-  )
+  );
 }
 
-export default App
+export default App;
