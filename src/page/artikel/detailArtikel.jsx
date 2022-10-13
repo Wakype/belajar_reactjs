@@ -40,47 +40,63 @@ const DetailArtikel = () => {
 
   return (
     <section className="w-screen">
-      <div>
-        <Button
-          title={"tes"}
-          onClick={() => {
-            console.log(slug);
-            console.log("artikel", artikel);
-          }}
-        />
-      </div>
       <div className="flex justify-center flex-col items-center">
         <form
           action=""
-          className="flex flex-col border rounded border-green-500 px-5 py-5 mt-5 shadow shadow-[#829460] form"
+          className="flex flex-col px-10 border rounded border-green-500 py-5 mt-5 shadow shadow-[#829460] form"
           // onSubmit={handleSubmit}
         >
-          <div className="font8bit text-center">
-            <h1>Detail Artikel</h1>
+          <div className="flex flex-col items-center justify-center">
+            <div className="font8bit text-center">
+              <h1>- Detail Artikel -</h1>
+            </div>
+            <div className="border w-[100px] flex justify-center mt-3 border-green-500"></div>
           </div>
           <div className="">
-            <div className="flex space-x-12 my-7">
+            <div className="flex flex-col my-3 space-y-7">
+              <div className="flex justify-between font8bit items-center">
+                <div>
+                  <h1>ID</h1>
+                  <h1>{artikel.id}</h1>
+                </div>
+                <h1>{artikel.judul}</h1>
+                <div className="text-right">
+                  <h1>User</h1>
+                  <h1>{artikel.user_id}</h1>
+                </div>
+              </div>
               <div className="flex justify-center items-center">
                 <img
                   src={artikel.thumbnail}
                   alt={artikel.thumbnail}
-                  className="w-[200px]"
+                  className="w-[200px] h-[200px]"
                 />
               </div>
-              <div>
-                <h1>judul {artikel.judul}</h1>
-                <h1>id {artikel.id}</h1>
-                <h1>user id {artikel.user_id}</h1>
-                <h1>slug {artikel.slug}</h1>
-                <h1>artikel {artikel.artikel}</h1>
-                <h1>created {artikel.created_at}</h1>
-                <h1>updated {artikel.updated_at}</h1>
+              <div className="text-center">
+                <h1>{artikel.artikel}</h1>
+              </div>
+              <div className="flex justify-between items-center">
+                <div>
+                  <h1 className="italic">Created At</h1>
+                  <h1 className="w-[180px] truncate font8bit">
+                    {artikel.created_at}
+                  </h1>
+                </div>
+                <h1 className="font8bit text-center w-[700px]">
+                  {artikel.slug}
+                </h1>
+                <div>
+                  <h1 className="italic text-right">Updated At</h1>
+                  <h1 className="w-[180px] truncate font8bit">
+                    {artikel.updated_at}
+                  </h1>
+                </div>
               </div>
             </div>
 
             <div className="flex justify-end">
               <Button
-                edit={"px-5"}
+                edit={"px-5 mt-10"}
                 title={
                   isLoading ? (
                     <ScaleLoader color="#36d7b7" height={12} width={2} />

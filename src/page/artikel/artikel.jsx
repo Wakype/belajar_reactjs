@@ -1,7 +1,12 @@
 import React from "react";
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
-import { deleteArtikel, getAllArtikel } from "../../API/artikel_API/artikel";
+import {
+  deleteArtikel,
+  getAllArtikel,
+  getDetailArtikel,
+  updateArtikel,
+} from "../../API/artikel_API/artikel";
 import Skeleton from "react-loading-skeleton";
 import { Button } from "../../component";
 import Cookies from "js-cookie";
@@ -10,6 +15,7 @@ import Swal from "sweetalert2";
 const Artikel = () => {
   const [listArtikel, setListArtikel] = React.useState([]);
   const [fetchArtikel, setFetchArtikel] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const navigate = useNavigate();
 
   const getArtikelHandle = async () => {
@@ -33,43 +39,6 @@ const Artikel = () => {
 
   return (
     <section>
-      {/* <table className="table-auto w-screen px-2">
-          <thead>
-            <tr className="border">
-              <th className="py-3 border-r">No</th>
-              <th>ID</th>
-              <th>Thumbnail</th>
-              <th>Judul</th>
-              <th>Slug</th>
-              <th>Dibuat</th>
-              <th>Diupdate</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fetchArtikel ? (
-              <tr key="">
-                <td>
-                  <Skeleton baseColor="red" highlightColor="blue" count={1} />
-                </td>
-              </tr>
-            ) : (
-              listArtikel?.map((artikel, index) => {
-                return (
-                  <tr className="border text-center" key={index}>
-                    <td className="border-r">{index + 1}</td>
-                    <td>{artikel?.id}</td>
-                    <td><img src={artikel?.Thumbnail} alt="" /></td>
-                    <td>{artikel?.judul}</td>
-                    <td>{artikel?.slug}</td>
-                    <td>{artikel.created_at}</td>
-                    <td>{artikel.updated_at}</td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table> */}
-
       <div className="px-5 flex justify-between">
         <NavLink
           to={"/artikel/create"}
@@ -167,8 +136,10 @@ const Artikel = () => {
 
                           Toast.fire({
                             icon: "success",
-                            title: "Artikel berhasil di Update!",
+                            title: "Artikel berhasil di Hapus!",
                           });
+
+                          getArtikelHandle();
                         }
                       } catch (err) {
                         console.log("delete err =>", err);
