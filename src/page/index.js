@@ -1,7 +1,12 @@
 import Home from "./home";
-import PakIhsan from "./pakIhsan";
+import EnglishCourse from "./home2";
+import Header from "./header";
+import Body from "./body";
+
 
 export {
     Home,
-    PakIhsan,
+    EnglishCourse,
+    Header,
+    Body
 }

@@ -1,11 +1,11 @@
 import React from "react";
-import { Home, PakIhsan } from "./page";
+import { EnglishCourse, Home, PakIhsan } from "./page";
 
 function App() {
   return (
     <React.Fragment>
       {/* <PakIhsan/> */}
-      <Home/>
+      <EnglishCourse/>
     </React.Fragment>
   );
 }
