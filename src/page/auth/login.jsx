@@ -4,6 +4,7 @@ import { Button, InputStateEvent } from "../../component";
 import { useNavigate } from "react-router-dom";
 import { LoginProses } from "../../API/login_API/login";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import Swal from "sweetalert2";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -33,6 +34,29 @@ const Login = () => {
       const response = await LoginProses(payload);
       const data = response.data;
       Cookies.set("myapps_token", data?.token);
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener(
+            "mouseenter",
+            Swal.stopTimer
+          );
+          toast.addEventListener(
+            "mouseleave",
+            Swal.resumeTimer
+          );
+        },
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: "Berhasil Login!",
+      });
 
       return navigate("/artikel", { replace: true });
     } catch (err) {

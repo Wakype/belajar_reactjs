@@ -2,7 +2,11 @@ import React from "react";
 import { Button, InputStateEvent, UploadInput } from "../../component";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import Swal from "sweetalert2";
-import { createArtikel, getDetailArtikel, updateArtikel } from "../../API/artikel_API/artikel";
+import {
+  createArtikel,
+  getDetailArtikel,
+  updateArtikel,
+} from "../../API/artikel_API/artikel";
 import { useNavigate, useParams } from "react-router-dom";
 import Resizer from "react-image-file-resizer";
 import { updateUser } from "../../API/user_API/user";
@@ -33,6 +37,7 @@ const UpdateArtikel = () => {
     try {
       setIsLoading(true);
       const response = await updateArtikel(id, payload);
+      console.log("respon update =>", response)
 
       if (response.data.status === "Fail") {
         const Toast = Swal.mixin({
@@ -80,7 +85,7 @@ const UpdateArtikel = () => {
           judul: payload.judul,
           slug: payload.slug,
           thumbnail: payload.thumbnail,
-          imagePreview: null,
+          imagePreview: payload.thumbnail,
           artikel: payload.artikel,
           created_at: payload.created_at,
         };
@@ -97,6 +102,7 @@ const UpdateArtikel = () => {
       const dataArtikel = response.data.data;
       setPayload((e) => {
         return {
+          ...payload,
           judul: dataArtikel.judul,
           slug: dataArtikel.slug,
           thumbnail: dataArtikel.thumbnail,
@@ -117,15 +123,7 @@ const UpdateArtikel = () => {
 
   return (
     <section>
-      <div>
-        <Button
-          title={"tes"}
-          onClick={() => {
-            console.log(slug);
-            console.log("payload =>", payload);
-          }}
-        />
-      </div>
+  
 
       <div className="flex justify-center flex-col items-center">
         <form

@@ -3,6 +3,7 @@ import { Button, Input, InputStateEvent, Select } from "../component";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getAllUser, createUser } from "../API/user_API/user";
+import Swal from "sweetalert2";
 
 const CreateUser = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const CreateUser = () => {
     password_confimation: "",
   });
   const [isLoading, setIsLoading] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [error, setError] = React.useState({});
 
   const handleChange = (e) => {
@@ -32,17 +33,48 @@ const CreateUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      setIsLoading(true);
-      const response = await createUser(user);
-      setIsLoading(false);
-      return navigate("/user");
-    } catch (err) {
-      setErrorMessage('Terjadi kesalahan')
-      setError(err?.response?.data?.errors)
-      console.log(err);
-      setIsLoading(false);
-    }
+    Swal.fire({
+      title: "Yakin ingin menghapus user ini?",
+      text: "Data ini tidak bisa kembali lagi!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, hapus user!",
+      cancelButtonText: "Batal",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          setIsLoading(true);
+          const response = await createUser(user);
+          setIsLoading(false);
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "success",
+            title: "User berhasil dibuat!",
+          });
+
+          return navigate("/user");
+        } catch (err) {
+          setErrorMessage("Terjadi kesalahan");
+          setError(err?.response?.data?.errors);
+          console.log(err);
+          setIsLoading(false);
+        }
+      }
+    });
   };
   return (
     <section className="bg-purple-900">
@@ -66,7 +98,9 @@ const CreateUser = () => {
               value={user.username}
               onChange={handleChange}
             />
-            <p className="text-red-500 italic text-[15px]">{error?.username?.[0]}</p>
+            <p className="text-red-500 italic text-[15px]">
+              {error?.username?.[0]}
+            </p>
             <InputStateEvent
               name={"name"}
               placeholder="Nama"
@@ -74,7 +108,9 @@ const CreateUser = () => {
               value={user.name}
               onChange={handleChange}
             />
-            <p className="text-red-500 italic text-[15px]">{error?.name?.[0]}</p>
+            <p className="text-red-500 italic text-[15px]">
+              {error?.name?.[0]}
+            </p>
             <InputStateEvent
               name={"email"}
               placeholder="Email"
@@ -82,7 +118,9 @@ const CreateUser = () => {
               value={user.email}
               onChange={handleChange}
             />
-            <p className="text-red-500 italic text-[15px]">{error?.email?.[0]}</p>
+            <p className="text-red-500 italic text-[15px]">
+              {error?.email?.[0]}
+            </p>
             <Select
               name={"jenis_kelamin"}
               placeholder="Jenis Kelamin"
@@ -94,7 +132,9 @@ const CreateUser = () => {
               <option value="laki-laki">laki-laki</option>
               <option value="perempuan">perempuan</option>
             </Select>
-            <p className="text-red-500 italic text-[15px]">{error?.jenis_kelamin?.[0]}</p>
+            <p className="text-red-500 italic text-[15px]">
+              {error?.jenis_kelamin?.[0]}
+            </p>
             <InputStateEvent
               name={"password"}
               placeholder="Password"
@@ -102,7 +142,9 @@ const CreateUser = () => {
               value={user.password}
               onChange={handleChange}
             />
-            <p className="text-red-500 italic text-[15px]">{error?.password?.[0]}</p>
+            <p className="text-red-500 italic text-[15px]">
+              {error?.password?.[0]}
+            </p>
             <InputStateEvent
               name={"password_confimation"}
               placeholder="Confirm Password"

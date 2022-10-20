@@ -32,8 +32,54 @@ const CreateArtikel = () => {
       setIsLoading(true);
       const response = await createArtikel(payload);
       navigate('/artikel', {replace: true});
+      
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener(
+            "mouseenter",
+            Swal.stopTimer
+          );
+          toast.addEventListener(
+            "mouseleave",
+            Swal.resumeTimer
+          );
+        },
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: "Berhasil membuat artikel!",
+      });
     } catch (err) {
       console.log("error", err);
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener(
+            "mouseenter",
+            Swal.stopTimer
+          );
+          toast.addEventListener(
+            "mouseleave",
+            Swal.resumeTimer
+          );
+        },
+      });
+
+      Toast.fire({
+        icon: "error",
+        title: "Gagal membuat artikel!",
+      });
     } finally {
       setIsLoading(false);
     }
