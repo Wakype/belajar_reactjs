@@ -4,8 +4,8 @@ import { Home, PakIhsan } from "./page";
 function App() {
   return (
     <React.Fragment>
-      <PakIhsan/>
-      {/* <Home/> */}
+      {/* <PakIhsan/> */}
+      <Home/>
     </React.Fragment>
   );
 }
