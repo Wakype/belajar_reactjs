@@ -1,16 +1,30 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { User, DetailUser, CreateUser, UpdateUser, Artikel, CreateArtikel, DetailArtikel, UpdateArtikel } from "./page";
+import {
+  User,
+  DetailUser,
+  CreateUser,
+  UpdateUser,
+  Artikel,
+  CreateArtikel,
+  DetailArtikel,
+  UpdateArtikel,
+} from "./page";
 import { Input, Select } from "./component";
 import ProtectRoute from "./routers/protectRoute";
 import Login from "./page/auth/login";
+import ReduxPage from "./page/redux";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
+  let dispatch = useDispatch();
+  const color = useSelector((state) => state.color);
+  console.log(color.color);
   return (
     <React.Fragment>
       <h1
-        style={{ textAlign: "center" }}
-        className="bg-red-500 text-white font8bit"
+        style={{ textAlign: "center", backgroundColor: color.color}}
+        className={` text-black font8bit`}
       >
         Belajar API 2
       </h1>
@@ -22,6 +36,14 @@ function App() {
           element={
             <ProtectRoute>
               <User />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/redux"
+          element={
+            <ProtectRoute>
+              <ReduxPage />
             </ProtectRoute>
           }
         />

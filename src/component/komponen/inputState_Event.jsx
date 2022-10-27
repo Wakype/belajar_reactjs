@@ -16,7 +16,7 @@ export default function InputStateEvent({
 
       <input
         {...props}
-        className="input-text border border-green-500 rounded w-[300px] py-[5px] hover:border-1 transition-all ease-in-out hover:border-green-800 bg-transparent"
+        className="input-text px-2 border border-green-500 rounded w-[300px] py-[5px] hover:border-1 transition-all ease-in-out hover:border-green-800 bg-transparent"
         id={label}
       />
       {isError && <p className="error border-red-500 rounded text-red-500 italic">{textError}</p>}

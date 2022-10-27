@@ -46,6 +46,12 @@ const Artikel = () => {
         >
           Buat Artikel
         </NavLink>
+        <NavLink
+          to={"/redux"}
+          className="px-6 text-center py-2 border border-green-500 rounded my-5 hover:bg-green-500 hover:text-white transition-all ease-in-out hover:shadow-lg hover:shadow-green-400"
+        >
+          Redux
+        </NavLink>
         <Button
           edit="h-[40px] my-5 py-1 border-red-500 hover:border-red-500 hover:bg-red-500 hover:shadow-red-400"
           title={"Logout"}

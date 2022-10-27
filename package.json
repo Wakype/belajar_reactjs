@@ -17,6 +17,10 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-spinners": "^0.13.6",
+    "redux": "^4.2.0",
+    "redux-saga": "^1.2.1",
+    "redux-thunk": "^2.4.1",
+    "save": "^2.9.0",
     "sweetalert2": "^11.4.34",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
