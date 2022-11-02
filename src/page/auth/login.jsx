@@ -5,9 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { LoginProses } from "../../API/login_API/login";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { authLogin } from "../../redux/action/authAction";
 
 const Login = () => {
   let navigate = useNavigate();
+  let dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
@@ -31,9 +34,15 @@ const Login = () => {
 
     try {
       setIsLoading(true);
-      const response = await LoginProses(payload);
-      const data = response.data;
-      Cookies.set("myapps_token", data?.token);
+      const response = await dispatch(authLogin(payload));
+      const error = response?.response?.data?.message
+      console.log("response", response)
+      if (response?.status === "Success") {
+        return navigate("/artikel", { replace: true }); 
+      }
+      // const response = await LoginProses(payload);
+      // const data = response.data;
+      // Cookies.set("myapps_token", data?.token);
 
       const Toast = Swal.mixin({
         toast: true,
@@ -58,7 +67,7 @@ const Login = () => {
         title: "Berhasil Login!",
       });
 
-      return navigate("/artikel", { replace: true });
+      // return navigate("/artikel", { replace: true });
     } catch (err) {
       console.log("error =>", err);
     } finally {
@@ -76,8 +85,9 @@ const Login = () => {
           className="flex flex-col border rounded border-green-500 px-5 py-5 mt-5 shadow shadow-[#829460] form"
           onSubmit={handleSubmit}
         >
-          <div className="font8bit text-center">
+          <div className="font8bit text-center flex flex-col">
             <h1>LOGIN</h1>
+            {/* <h1>{error}</h1> */}
           </div>
           <div className="">
             <InputStateEvent

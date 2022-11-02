@@ -10,13 +10,18 @@ const ReduxPage = () => {
   const store = useSelector((state) => state);
   const count = useSelector((state) => state.count);
   const color = useSelector((state) => state.color);
+  const author = useSelector((state) => state.auth);
 
   let dispatch = useDispatch();
   console.log("store =>", store);
   console.log("count =>", count);
 
   return (
-    <section className="flex justify-center items-center flex-col py-5">
+    <section className="flex justify-center items-center flex-col py-5 px-[20px]">
+      <div className="flex justify-between border border-green-500 rounded w-full text-center my-3 py-3 px-5">
+        <h1>{author?.name}</h1>
+        <h1>{author?.email}</h1>
+      </div>
       <div className="border border-green-500 rounded px-[100px] text-center my-3">
         <div>
           <h1>Redux Test</h1>

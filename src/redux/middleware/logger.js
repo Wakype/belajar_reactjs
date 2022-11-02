@@ -8,11 +8,11 @@ export const logger = (state) => {
     return (action) => {
       console.log("Logger =>", action);
 
-      if (action.type === "changeColor") {
-        return next(action);
-      } else {
-        return;
-      }
+      // if (action.type === "changeColor") {
+      //   return next(action);
+      // } else {
+      //   return;
+      // }
     };
   };
 };

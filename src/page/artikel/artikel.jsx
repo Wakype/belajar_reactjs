@@ -11,12 +11,14 @@ import Skeleton from "react-loading-skeleton";
 import { Button } from "../../component";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 const Artikel = () => {
   const [listArtikel, setListArtikel] = React.useState([]);
   const [fetchArtikel, setFetchArtikel] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const navigate = useNavigate();
+  const author = useSelector((state) => state.auth);
 
   const getArtikelHandle = async () => {
     try {
@@ -60,6 +62,10 @@ const Artikel = () => {
             return navigate("/login", { replace: true });
           }}
         />
+      </div>
+      <div className="px-5 flex justify-between">
+        <h1>{author?.name}</h1>
+        <h1>{author?.email}</h1>
       </div>
 
       <div className="grid grid-cols-1">

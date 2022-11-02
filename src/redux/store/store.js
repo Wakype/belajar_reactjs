@@ -28,5 +28,5 @@ const composeEnhancers =
 
 export const store = legacy_createStore(
   allReducers,
-  composeEnhancers(applyMiddleware(logger))
+  composeEnhancers(applyMiddleware(thunk))
 );
