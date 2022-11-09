@@ -4,6 +4,7 @@ export default function InputStateEvent({
   label,
   isError,
   textError,
+  errorMessage,
   ...props
 }) {
   return (
@@ -19,7 +20,7 @@ export default function InputStateEvent({
         className="input-text px-2 border border-green-500 rounded w-[300px] py-[5px] hover:border-1 transition-all ease-in-out hover:border-green-800 bg-transparent"
         id={label}
       />
-      {isError && <p className="error border-red-500 rounded text-red-500 italic">{textError}</p>}
+      {isError && <p className="error border-red-500 rounded text-red-500 italic">{errorMessage}</p>}
     </div>
   );
 }

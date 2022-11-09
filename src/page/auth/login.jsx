@@ -7,6 +7,7 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { authLogin } from "../../redux/action/authAction";
+import 'animate.css';
 
 const Login = () => {
   let navigate = useNavigate();
@@ -35,10 +36,10 @@ const Login = () => {
     try {
       setIsLoading(true);
       const response = await dispatch(authLogin(payload));
-      const error = response?.response?.data?.message
-      console.log("response", response)
+      const error = response?.response?.data?.message;
+      console.log("response", response);
       if (response?.status === "Success") {
-        return navigate("/artikel", { replace: true }); 
+        return navigate("/artikel", { replace: true });
       }
       // const response = await LoginProses(payload);
       // const data = response.data;
@@ -51,14 +52,8 @@ const Login = () => {
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {
-          toast.addEventListener(
-            "mouseenter",
-            Swal.stopTimer
-          );
-          toast.addEventListener(
-            "mouseleave",
-            Swal.resumeTimer
-          );
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
         },
       });
 
@@ -82,7 +77,7 @@ const Login = () => {
       <div className="flex justify-center flex-col items-center">
         <form
           action=""
-          className="flex flex-col border rounded border-green-500 px-5 py-5 mt-5 shadow shadow-[#829460] form"
+          className="flex flex-col border rounded border-green-500 px-5 py-5 mt-5 shadow shadow-[#829460] form animate__animated animate__fadeInRightBig"
           onSubmit={handleSubmit}
         >
           <div className="font8bit text-center flex flex-col">
@@ -108,7 +103,21 @@ const Login = () => {
               label={"Password"}
               type="password"
             />
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <Button
+                edit={"px-5"}
+                title={
+                  isLoading ? (
+                    <ScaleLoader color="#36d7b7" height={12} width={2} />
+                  ) : (
+                    "Register"
+                  )
+                }
+                type="button"
+                onClick={() => {
+                  return navigate("/register", { replace: true });
+                }}
+              />
               <Button
                 edit={"px-5"}
                 title={

@@ -13,6 +13,7 @@ import {
 import { Input, Select } from "./component";
 import ProtectRoute from "./routers/protectRoute";
 import Login from "./page/auth/login";
+import Register from "./page/auth/register";
 import ReduxPage from "./page/redux";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -31,6 +32,7 @@ function App() {
 
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/user"
           element={

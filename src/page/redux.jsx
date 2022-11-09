@@ -1,9 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../component";
 import { decrement, increment } from "../redux/action/countAction";
 
 const ReduxPage = () => {
+  let navigate = useNavigate();
   const value = useSelector((state) => state.count.value);
   const status = useSelector((state) => state.count.status);
 
@@ -89,6 +91,15 @@ const ReduxPage = () => {
             dispatch({
               type: "returnColor",
             });
+          }}
+        />
+      </div>
+      <div>
+        <Button
+          edit="h-[40px] my-5 py-1 border-red-500 hover:border-red-500 hover:bg-red-500 hover:shadow-red-400"
+          title={"Go Back"}
+          onClick={() => {
+            navigate("/artikel", {replace: true})
           }}
         />
       </div>
