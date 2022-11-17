@@ -1,11 +1,12 @@
-import React from "react";
-import { EnglishCourse, Home, PakIhsan } from "./page";
+import React from 'react';
+import { EnglishCourse, Home,  } from './page';
 
 function App() {
   return (
     <React.Fragment>
-      {/* <PakIhsan/> */}
-      <EnglishCourse/>
+      <section className="w-screen h-screen">
+        <EnglishCourse />
+      </section>
     </React.Fragment>
   );
 }
