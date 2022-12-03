@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.cdnfonts.com/css/poppins');
+@import url('https://fonts.cdnfonts.com/css/indonesia-script');
+@import url('https://fonts.cdnfonts.com/css/comicy');
 
 body {
   margin: 0;
@@ -14,4 +17,27 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.bgLogin {
+  background-image: url("https://static.vecteezy.com/system/resources/previews/003/302/807/original/abstract-geometric-mural-colorful-seamless-pattern-in-bauhaus-style-vector.jpg");
+  background-size: cover;
+}
+
+.bgLogin1 {
+  background-image: url("https://static.vecteezy.com/system/resources/previews/003/302/955/original/abstract-geometric-mural-colorful-seamless-pattern-in-bauhaus-style-vector.jpg");
+  background-size: cover;
+}
+
+.poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.indoScript {
+  font-family: 'Indonesia Script', sans-serif;
+}
+
+.comicy {
+  font-family: 'Comicy', sans-serif;
+                                                
 }
