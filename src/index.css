@@ -41,3 +41,22 @@ code {
   font-family: 'Comicy', sans-serif;
                                                 
 }
+
+.inputAnimate {
+  transition: all .5s;
+}
+
+.inputAnimate::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+.inputAnimate:placeholder-shown {
+  text-overflow: ellipsis;
+}
+
+
+.inputAnimate:focus {
+  width: 300px;
+  top: 0;
+  right: 100%;
+}

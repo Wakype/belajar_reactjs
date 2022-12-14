@@ -1,5 +1,11 @@
-import Cookies from "js-cookie";
-import { authMeProcess, LoginProses, LupaPasswordProses, RegisterProses, ResetPasswordProses } from "../../api/loginAPI";
+import Cookies from 'js-cookie';
+import {
+  authMeProcess,
+  LoginProses,
+  LupaPasswordProses,
+  RegisterProses,
+  ResetPasswordProses,
+} from '../../api/loginAPI';
 
 export function authLogin(payload) {
   return async (dispatch) => {
@@ -7,22 +13,23 @@ export function authLogin(payload) {
       let response = await LoginProses(payload);
       // let response = await authMeProcess();
       let data = response.data;
-      console.log("dataAuthAction =>", data);
+      console.log('dataAuthAction =>', data);
 
       dispatch({
-        type: "login",
+        type: 'login',
         name: data?.user?.name,
         email: data?.user?.email,
         password: data?.user?.password,
         status: data?.user?.status,
         jenisKelamin: data?.user?.jenisKelamin,
+        token: data?.token,
         isAuth: true,
       });
 
-      Cookies.set("myapps_token", data?.token);
+      Cookies.set('myapps_token', data?.token);
       return data;
     } catch (err) {
-      console.log("auth error =>", err);
+      console.log('auth error =>', err);
       return err;
     }
   };
@@ -34,10 +41,10 @@ export function authMe(payload) {
       // let response = await LoginProses(payload);
       let response = await authMeProcess();
       let data = response.data;
-      console.log("data =>", data);
+      console.log('data =>', data);
 
       dispatch({
-        type: "login",
+        type: 'login',
         name: data?.user?.name,
         email: data?.user?.email,
         password: data?.user?.password,
@@ -46,10 +53,10 @@ export function authMe(payload) {
         isAuth: true,
       });
 
-      Cookies.set("myapps_token", data?.token);
+      Cookies.set('myapps_token', data?.token);
       return data;
     } catch (err) {
-      console.log("auth error =>", err);
+      console.log('auth error =>', err);
       return err;
     }
   };
@@ -60,9 +67,9 @@ export function authRegister(payload) {
     try {
       let response = await RegisterProses(payload);
       let data = response.data;
-      console.log("data", data);
+      console.log('data', data);
       dispatch({
-        type: "register",
+        type: 'register',
         name: data?.user?.name,
         email: data?.user?.email,
         password: data?.user?.password,
@@ -70,10 +77,10 @@ export function authRegister(payload) {
         jenisKelamin: data?.user?.jenisKelamin,
         isAuth: true,
       });
-      Cookies.set("myapps_token", data?.token);
+      Cookies.set('myapps_token', data?.token);
       return data;
     } catch (err) {
-      console.log("auth error =>", err);
+      console.log('auth error =>', err);
       return err;
     }
   };
@@ -84,16 +91,16 @@ export function authLupaPassword(payload) {
     try {
       let response = await LupaPasswordProses(payload);
       let data = response.data;
-      console.log("data", data);
+      console.log('data', data);
       // dispatch({
       //   type: "login",
       //   email: data?.user?.email,
       //   isAuth: true,
       // });
-      Cookies.set("myapps_token", data?.token);
+      Cookies.set('myapps_token', data?.token);
       return data;
     } catch (err) {
-      console.log("auth error =>", err);
+      console.log('auth error =>', err);
       return err;
     }
   };
@@ -104,16 +111,16 @@ export function authResetPassword(id, token, payload) {
     try {
       let response = await ResetPasswordProses(id, token, payload);
       let data = response.data;
-      console.log("data", data);
+      console.log('data', data);
       // dispatch({
       //   type: "login",
       //   password: data?.user?.password,
       //   isAuth: true,
       // });
-      Cookies.set("myapps_token", data?.token);
+      Cookies.set('myapps_token', data?.token);
       return data;
     } catch (err) {
-      console.log("auth error =>", err);
+      console.log('auth error =>', err);
       return err;
     }
   };

@@ -15,7 +15,8 @@ const Login = () => {
   let dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
+  const [emailError, setEmailError] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState('');
   const [payload, setPayload] = React.useState({
     name: '',
     email: '',
@@ -25,16 +26,24 @@ const Login = () => {
   });
 
   const handleChange = (e) => {
-    setIsError(false);
     setPayload((payload) => {
       return {
         ...payload,
         [e.target.name]: e.target.value,
       };
     });
+
+    if (payload.email === '' || payload.password === '') {
+      if (payload.email !== '') {
+        setEmailError('');
+      }
+      if (payload.password !== '') {
+        setPasswordError('');
+      }
+    }
   };
 
-  console.log('change', payload);
+  // console.log('change', payload);
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -50,6 +59,7 @@ const Login = () => {
       const data = response.response;
       // const error = response?.response?.data?.message;
       console.log('responseLogin =>', response);
+      // console.log('errvalidate =>', response.response.data);
       if (response?.status === 'Success') {
         const Toast = Swal.mixin({
           toast: true,
@@ -96,7 +106,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  console.log('payload', payload);
+  // console.log('payload', payload);
   return (
     <section className="flex">
       <div className="w-[50%] h-screen justify-center bgLogin flex flex-col ">
@@ -155,6 +165,9 @@ const Login = () => {
                 stylingInput={`px-3 w-full py-2 border-white text-white`}
                 stylingLabel={`text-white`}
               />
+              <p className="text-red-600 text-[15px] italic poppins">
+                {emailError}
+              </p>
               <CustomInput
                 value={payload.password}
                 typeInput={'password'}
@@ -167,6 +180,9 @@ const Login = () => {
                 stylingInput={`px-3 w-full py-2 border-white text-white`}
                 stylingLabel={`text-white`}
               />
+              <p className="text-red-600 text-[15px] italic poppins">
+                {passwordError}
+              </p>
             </div>
 
             <div
@@ -182,8 +198,12 @@ const Login = () => {
               </NavLink>
             </div>
 
-            <div className="w-full space-y-5 mt-[80px]">
-              <NavLink to={'/home'}>
+            <div className="w-full space-y-5 mt-[50px]">
+              {isLoading ? (
+                <div className="flex justify-center items-center border-white border-2 rounded py-[10px] cursor-wait transition-all ease-in-out text-white poppins">
+                  <ScaleLoader color="#36d7b7" height={15} width={5} />
+                </div>
+              ) : (
                 <CustomButton
                   data-aos-duration="2000"
                   data-aos-easing="ease-in-out"
@@ -193,7 +213,8 @@ const Login = () => {
                   label={'Sign in'}
                   stylingButton={`w-full text-[#395144] bg-white border-white font-semibold py-[10px] hover:border-white hover:bg-[#395144] hover:text-white`}
                 />
-              </NavLink>
+              )}
+
               <CustomButton
                 data-aos-duration="2200"
                 data-aos-easing="ease-in-out"

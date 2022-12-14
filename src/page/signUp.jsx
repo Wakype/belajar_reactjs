@@ -1,32 +1,65 @@
 import React, { useEffect } from 'react';
-import { FaGoogle } from 'react-icons/fa';
+
 import { NavLink, useNavigate } from 'react-router-dom';
 import { CustomButton, CustomInput, CustomSelect } from '../components';
 import { useDispatch } from 'react-redux';
-import { LoginProses } from '../api/loginAPI';
+
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import Swal from 'sweetalert2';
-import { authLogin, authRegister } from '../redux/action/authAction';
+import { authRegister } from '../redux/action/authAction';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const SignUp = () => {
   let navigate = useNavigate();
   let dispatch = useDispatch();
-  // response?.response?.data?.errors?.email?.msg,
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
+  const [nameError, setNameError] = React.useState('');
+  const [emailError, setEmailError] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState('');
+  const [confirmError, setConfirmError] = React.useState('');
+  const [statusError, setStatusError] = React.useState('');
+  const [kelaminError, setKelaminError] = React.useState('');
   const [payload, setPayload] = React.useState({
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
     status: '',
     jenisKelamin: '',
   });
 
   const handleChange = (e) => {
     setIsError(false);
+    if (
+      payload.name === '' ||
+      payload.email === '' ||
+      payload.password === '' ||
+      payload.confirmPassword === '' ||
+      payload.status === '' ||
+      payload.jenisKelamin === ''
+    ) {
+      if (payload.name !== '') {
+        setNameError('');
+      }
+      if (payload.email !== '') {
+        setEmailError('');
+      }
+      if (payload.password !== '') {
+        setPasswordError('');
+      }
+      if (payload.confirmPassword !== '') {
+        setConfirmError('');
+      }
+      if (payload.status !== '') {
+        setStatusError('');
+      }
+      if (payload.jenisKelamin !== '') {
+        setKelaminError('');
+      }
+    }
     setPayload((payload) => {
       return {
         ...payload,
@@ -41,7 +74,8 @@ const SignUp = () => {
     try {
       setIsLoading(true);
       const response = await dispatch(authRegister(payload));
-      console.log('responseRegister =>', response);
+      // console.log('responseRegister =>', response);
+      // console.log('errValidte =>', response.response.data);
       if (response?.status === 'Success') {
         const Toast = Swal.mixin({
           toast: true,
@@ -62,6 +96,62 @@ const SignUp = () => {
         return navigate('/login', { replace: true });
       }
       if (response?.response?.data?.status === 'fail') {
+        if (
+          response?.response?.data?.errors?.name?.msg === 'Nama Wajib diisi' ||
+          response?.response?.data?.errors?.email?.msg ===
+            'Email sudah digunakan' ||
+          response?.response?.data?.errors?.email?.msg ===
+            'Gunakan Email Valid' ||
+          payload.password === '' ||
+          response?.response?.data?.errors?.password?.msg ===
+            'Password wajib 8 huruf' ||
+          payload.confirmPassword !== payload.password ||
+          response?.response?.data?.errors?.status?.msg ===
+            'status bukan emum' ||
+          response?.response?.data?.errors?.jenisKelamin?.msg ===
+            'jenis kelamin hanya laki-laki peempuan'
+        ) {
+          if (
+            payload.name === '' ||
+            response?.response?.data?.errors?.name?.msg === 'Nama Wajib diisi'
+          ) {
+            setNameError(response?.response?.data?.errors?.name?.msg);
+          }
+          if (
+            payload.email === '' ||
+            response?.response?.data?.errors?.email?.msg ===
+              'Email sudah digunakan' ||
+            response?.response?.data?.errors?.email?.msg ===
+              'Gunakan Email Valid'
+          ) {
+            setEmailError(response?.response?.data?.errors?.email?.msg);
+          }
+          if (
+            payload.password === '' ||
+            response?.response?.data?.errors?.password?.msg ===
+              'Password wajib 8 huruf'
+          ) {
+            setPasswordError(response?.response?.data?.errors?.password?.msg);
+          }
+          if (payload.confirmPassword !== payload.password) {
+            setConfirmError('Password harus sama');
+          }
+          if (
+            payload.status === '' ||
+            response?.response?.data?.errors?.status?.msg ===
+              'status bukan emum'
+          ) {
+            setStatusError('Status harus active / nonactive');
+          }
+          if (
+            payload.jenisKelamin === '' ||
+            response?.response?.data?.errors?.jenisKelamin?.msg ===
+              'jenis kelamin hanya laki-laki peempuan'
+          ) {
+            setKelaminError('Jenis Kelamin harus laki-laki / perempuan');
+          }
+        }
+
         // const Toast = Swal.mixin({
         //   toast: true,
         //   position: 'top-end',
@@ -79,7 +169,7 @@ const SignUp = () => {
         // });
       }
     } catch (err) {
-      console.log('authRegisterErr =>', err);
+      // console.log('authRegisterErr =>', err);
     } finally {
       setIsLoading(false);
     }
@@ -90,7 +180,7 @@ const SignUp = () => {
       duration: 1000,
     });
   }, []);
-  console.log('change', payload);
+  // console.log('change', payload);
   return (
     <section className="flex">
       <div className="w-[50%] h-screen justify-center bgLogin flex flex-col ">
@@ -142,6 +232,9 @@ const SignUp = () => {
                 stylingInput={`px-3 w-full py-2 border-white text-white`}
                 stylingLabel={`text-white`}
               />
+              <p className="text-red-600 text-[15px] italic poppins">
+                {nameError}
+              </p>
               <CustomInput
                 data-aos-duration="1200"
                 data-aos-easing="ease-in-out"
@@ -155,6 +248,9 @@ const SignUp = () => {
                 stylingInput={`px-3 w-full py-2 border-white text-white`}
                 stylingLabel={`text-white`}
               />
+              <p className="text-red-600 text-[15px] italic poppins">
+                {emailError}
+              </p>
               <CustomInput
                 data-aos-duration="1500"
                 data-aos-easing="ease-in-out"
@@ -168,8 +264,27 @@ const SignUp = () => {
                 stylingInput={`px-3 w-full py-2 border-white text-white`}
                 stylingLabel={`text-white`}
               />
-              <CustomSelect
+              <p className="text-red-600 text-[15px] italic poppins">
+                {passwordError}
+              </p>
+              <CustomInput
                 data-aos-duration="1700"
+                data-aos-easing="ease-in-out"
+                data-aos="fade-left"
+                typeInput={'password'}
+                placeholder={'Konfirmasi Password'}
+                onChange={handleChange}
+                value={payload.confirmPassword}
+                name={'confirmPassword'}
+                label="Konfirmasi Password"
+                stylingInput={`px-3 w-full py-2 border-white text-white`}
+                stylingLabel={`text-white`}
+              />
+              <p className="text-red-600 text-[15px] italic poppins">
+                {confirmError}
+              </p>
+              <CustomSelect
+                data-aos-duration="2000"
                 data-aos-easing="ease-in-out"
                 data-aos="fade-left"
                 onChange={handleChange}
@@ -184,8 +299,11 @@ const SignUp = () => {
                 label={'Aktifasi'}
                 StylingSelect={'border-white text-white px-2'}
               />
+              <p className="text-red-600 text-[15px] italic poppins">
+                {statusError}
+              </p>
               <CustomSelect
-                data-aos-duration="2000"
+                data-aos-duration="2200"
                 data-aos-easing="ease-in-out"
                 data-aos="fade-left"
                 onChange={handleChange}
@@ -200,12 +318,19 @@ const SignUp = () => {
                 label={'Jenis Kelamin'}
                 StylingSelect={'border-white text-white px-2'}
               />
+              <p className="text-red-600 text-[15px] italic poppins">
+                {kelaminError}
+              </p>
             </div>
 
-            <div className="w-full space-y-5 mt-[40px]">
-              <NavLink to={'/home'}>
+            <div className="w-full space-y-5 mt-[30px]">
+              {isLoading ? (
+                <div className="flex justify-center items-center border-white border-2 rounded py-[10px] cursor-wait transition-all ease-in-out text-white poppins">
+                  <ScaleLoader color="#36d7b7" height={15} width={5} />
+                </div>
+              ) : (
                 <CustomButton
-                  data-aos-duration="2200"
+                  data-aos-duration="2500"
                   data-aos-easing="ease-in-out"
                   data-aos="fade-left"
                   onClick={handleSubmit}
@@ -213,16 +338,7 @@ const SignUp = () => {
                   label={'Sign up'}
                   stylingButton={`w-full text-[#395144] bg-white border-white font-semibold py-[10px] hover:border-white hover:bg-[#395144] hover:text-white`}
                 />
-              </NavLink>
-              <CustomButton
-                data-aos-duration="2500"
-                data-aos-easing="ease-in-out"
-                data-aos="fade-left"
-                typeButton={'button'}
-                label={'Sign in with Google'}
-                stylingButton={`w-full text-white border-white font-semibold flex items-center justify-center space-x-2 py-[10px] hover:bg-white hover:text-[#395144]`}
-                tag={<FaGoogle />}
-              />
+              )}
             </div>
 
             <div className="flex justify-center mt-5">

@@ -34,7 +34,8 @@ const ForgotPassword = () => {
       setIsLoading(true);
       const response = await dispatch(authLupaPassword(payload));
       console.log('responseLupaPassword =>', response);
-      if (response?.status === 'Success') {
+      console.log('errvalidate', response.response.data);
+      if (response.status === 'Success') {
         const Toast = Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -47,13 +48,13 @@ const ForgotPassword = () => {
           },
         });
 
-        Toast.fire({
+        return Toast.fire({
           icon: 'success',
-          title: response?.msg,
+          title: response.msg,
         });
-        // return navigate('/reset-password', { replace: true });
       }
       if (response?.response?.data?.status === 'fail') {
+        
         const Toast = Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -66,7 +67,7 @@ const ForgotPassword = () => {
           },
         });
 
-        Toast.fire({
+        return Toast.fire({
           icon: 'error',
           title: response?.response?.data?.msg,
         });

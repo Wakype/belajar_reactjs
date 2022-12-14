@@ -10,7 +10,7 @@ export default function CustomInput({
   ...props
 }) {
   return (
-    <div className="input my-2">
+    <div className="input mt-2">
       <h1>
         <label className={`${stylingLabel} label cursor-pointer poppins text-white`} htmlFor={label}>
           {label} 

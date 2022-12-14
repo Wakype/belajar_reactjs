@@ -4,6 +4,7 @@ const initialState = {
     password: "",
     status: "",
     jenisKelamin: "",
+    token: "",
     isAuth: false,
   };
   
@@ -16,6 +17,7 @@ const initialState = {
         password: action.password,
         status: action.status,
         jenisKelamin: action.jenisKelamin,
+        token: action.token,
         isAuth: action.isAuth,
       };
     }

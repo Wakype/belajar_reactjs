@@ -3,7 +3,9 @@ import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import {
   DetailProduct,
   ForgotPassword,
+  Histori,
   Home,
+  Keranjang,
   Login,
   ResetPassword,
   SignUp,
@@ -29,10 +31,26 @@ function App() {
               }
             />
             <Route
-              path="/home/product/:id"
+              path="/product/detail/:uuid"
               element={
                 <ProtectRoute>
                   <DetailProduct />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/histori-pembelian"
+              element={
+                <ProtectRoute>
+                  <Histori />
+                </ProtectRoute>
+              }
+            />
+            <Route
+              path="/keranjang"
+              element={
+                <ProtectRoute>
+                  <Keranjang />
                 </ProtectRoute>
               }
             />
