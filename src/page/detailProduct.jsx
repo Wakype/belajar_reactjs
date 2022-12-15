@@ -225,7 +225,7 @@ const DetailProduct = () => {
 
         <div className=" overflow-hidden w-[320px] h-[255px] border-2 border-black rounded-[10px] bg-[#395144] flex flex-col justify-between px-[30px] py-[20px]">
           <div className="space-y-2">
-            <div className="flex justify-between">
+          <div className="flex justify-between">
               <p className="text-white text-[18px] font-medium">Rating</p>
               <div className="flex justify-center items-center">
                 <FaStar color="#FFD233" />

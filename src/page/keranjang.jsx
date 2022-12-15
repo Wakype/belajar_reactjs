@@ -4,22 +4,35 @@ import { useSelector } from 'react-redux';
 import { Navigate, NavLink, useNavigate, useParams } from 'react-router-dom';
 import { GetDetailProduct, GetKeranjang, PostBeli } from '../api/homeAPI';
 import logo from '../assets/images/logo.png';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
+import { DeleteKeranjang } from '../api/homeAPI';
 import { FaStar } from 'react-icons/fa';
 import { BsClockHistory } from 'react-icons/bs';
-import { CardKeranjang, CustomButton, CustomInput } from '../components';
+import {
+  CardKeranjang,
+  CustomButton,
+  CustomInput,
+  HargaBarang,
+} from '../components';
 import ScaleLoader from 'react-spinners/ScaleLoader';
+import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
+import { actionUbahItem } from '../redux/action/keranjangAction';
 
 const Keranjang = () => {
   const convertRupiah = require('rupiah-format');
   const navigate = useNavigate();
   const author = useSelector((state) => state.auth);
+  let dispatch = useDispatch();
 
   const [product, setProduct] = React.useState([]);
   const [fetchProduct, setFetchProduct] = React.useState(false);
+  const [status, setStatus] = React.useState(false);
   const [payload, setPayload] = React.useState({
     data: '',
   });
+  const [payloadTambah, setPayloadTambah] = React.useState({});
   const getKeranjang = async () => {
     try {
       let response = await GetKeranjang();
@@ -81,6 +94,28 @@ const Keranjang = () => {
     }
   };
 
+  const hapusKeranjanghandle = async (id) => {
+    // e.preventDefault();
+    try {
+      let response = await DeleteKeranjang(id);
+      console.log('hapusKeranjanghandle =>', response);
+      getKeranjang();
+    } catch (err) {
+      console.log('hapusKeranjanghandle err =>', err);
+    }
+  };
+
+  const tambahItem = async (id, jumlah) => {
+    try {
+      getKeranjang();
+      const response = await dispatch(actionUbahItem(payloadTambah));
+      setPayloadTambah({ id: id, jumlah: jumlah });
+      console.log('itemTambah =>', response);
+    } catch (err) {
+    } finally {
+    }
+  };
+
   React.useEffect(() => {
     getKeranjang();
   }, []);
@@ -133,17 +168,94 @@ const Keranjang = () => {
             {product.map((item, index) => {
               const json = item?.produk?.gambarProduk;
               const obj = JSON.parse(json);
+
+              const increment = () => {
+                tambahItem(item?.id, item?.jumlah + 1);
+
+                getKeranjang();
+              };
+              const decrement = () => {
+                tambahItem(item?.id, item?.jumlah - 1);
+                getKeranjang();
+              };
               return (
-                <CardKeranjang
-                  gambar={obj[0]?.gambar1}
+                <section
+                  className={`w-full h-[200px] rounded-[10px] border-2 border-black bg-[#395144] p-5 mb-5`}
                   key={index}
-                  harga={convertRupiah.convert(item.produk.harga)}
-                  nama={item.produk.namaProduk}
-                  rating={item.produk.rating}
-                  stok={item.produk.stok}
-                  id={item.id}
-                  jumlah={item.jumlah}
-                />
+                >
+                  <div className="flex h-full w-full">
+                    <div className="w-[220px] h-full mr-5 border-2 border-black rounded-[10px] flex items-center">
+                      <img
+                        src={obj[0]?.gambar1}
+                        alt=""
+                        className="rounded-[10px] w-full h-full"
+                      />
+                    </div>
+
+                    <div className="flex flex-col h-full justify-between w-full">
+                      <div>
+                        <h1 className="text-white font-semibold text-[20px]">
+                          {item.produk.namaProduk}
+                        </h1>
+                        <div className="flex  justify-between">
+                          <div className="flex flex-col">
+                            <p className="text-white">
+                              Stok tersisa: {item.produk.stok}
+                            </p>
+                            <p className="text-white font-semibold text-[16px]">
+                              {convertRupiah.convert(item.produk.harga)} ×{' '}
+                              {item.jumlah}
+                            </p>
+                          </div>
+                          <p className="text-white">
+                            Rating: {item.produk.rating}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-white flex justify-between">
+                        <div className="flex flex-col">
+                          <p className="italic">Total Harga:</p>
+                          <HargaBarang
+                            harga={convertRupiah.convert(
+                              item?.produk?.harga * item?.jumlah
+                            )}
+                          />
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <div
+                            className="flex items-center rounded-full border-2 border-[#e91e63] p-[5px] cursor-pointer"
+                            onClick={() => {
+                              hapusKeranjanghandle(item.id);
+                              setStatus(!status);
+                            }}
+                          >
+                            <FaRegTrashAlt color="#e91e63" size={15} />
+                          </div>
+                          <div className="h-[25px] w-[2px] bg-white"></div>
+                          <div className="flex items-center space-x-2">
+                            <AiOutlineMinusCircle
+                              className="cursor-pointer"
+                              color="#ffffff"
+                              size={30}
+                              onClick={() => {
+                                return decrement();
+                              }}
+                            />
+                            <p className="text-white">{item.jumlah}</p>
+                            <AiOutlinePlusCircle
+                              className="cursor-pointer"
+                              color="#ffffff"
+                              size={30}
+                              onClick={() => {
+                                return increment();
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
               );
             })}
           </div>
@@ -163,7 +275,14 @@ const Keranjang = () => {
                         {item.produk.namaProduk}
                       </h1>
                       <p className="text-white  font-semibold text-][18px]">
-                        {convertRupiah.convert(item.produk.harga)}
+                        {
+                          <HargaBarang
+                            style={'text-[18px]'}
+                            harga={convertRupiah.convert(
+                              item?.produk?.harga * item?.jumlah
+                            )}
+                          />
+                        }
                       </p>
                     </div>
                   </div>

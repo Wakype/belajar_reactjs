@@ -39,3 +39,7 @@ export async function GetHistory() {
 export async function DeleteKeranjang(id) { 
   return axios.delete(`/keranjang/hapus/${id}`)
 }
+
+export async function PutUbahItem(payload) {
+  return axios.put(`/keranjang/ubah-jumlah-item`, payload)
+}
