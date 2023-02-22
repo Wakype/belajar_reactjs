@@ -1,3 +1,9 @@
+@import url(//db.onlinewebfonts.com/c/561f38b1f4570de0fb8a39d691ab058c?family=Tungsten+Bold);
+@import url(//db.onlinewebfonts.com/c/2f86dc938a55788d3416b876b43a116a?family=Poppins);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +16,23 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+h1,
+p {
+  color: white;
+}
+.logoT {
+  font-family: 'Tungsten Bold' !important;
+}
+
+
+.changeColor {
+  color: white;
+}
+.changeColor:hover {
+  color: black;
 }
