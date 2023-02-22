@@ -3,8 +3,42 @@ import { CustomButton, CustomInput, SosmedLog } from '../components';
 import { NavLink } from 'react-router-dom';
 import { FaApple, FaFacebook, FaGoogle } from 'react-icons/fa';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Register = () => {
+  const formik = useFormik({
+    initialValues: {
+      namaLengkap: '',
+      username: '',
+      nomorTelpon: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validationSchema: Yup.object().shape({
+      namaLengkap: Yup.string()
+        .min(2, 'Password minimal 2 huruf')
+        .required('Nama Lengkap wajib diisi'),
+      username: Yup.string()
+        .min(4, 'Username minimal 4 huruf')
+        .required('Username wajib diisi'),
+      nomorTelpon: Yup.string()
+        .min(10, 'Nomor Telpon minimal 10 huruf')
+        .required('Nomor Telpon wajib diisi'),
+      email: Yup.string().email('Email salah').required('Email wajib diisi'),
+      password: Yup.string()
+        .min(8, 'Password minimal 8 huruf')
+        .required('Password wajib diisi'),
+      confirmPassword: Yup.string()
+        .min(8, 'Password minimal 8 huruf')
+        .required('Password wajib diisi'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+      // formik.resetForm();
+      // return navigate("/outlet/createOutlet", { replace: true });
+    },
+  });
   return (
     <section className="bg-black h-screen">
       <header className="px-[30px] h-[10%]">
@@ -53,23 +87,73 @@ const Register = () => {
                     <CustomInput
                       placeholder={'Nama Lengkap'}
                       inputStyle={'w-full'}
+                      inputType={'text'}
+                      id={'namaLengkap'}
+                      name={'namaLengkap'}
+                      value={formik.values.namaLengkap}
+                      onChange={formik.handleChange}
+                      isError={
+                        formik.touched.namaLengkap && formik.errors.namaLengkap
+                      }
+                      textError={formik.errors.namaLengkap}
+                      onBlur={formik.handleBlur}
                     />
                     <CustomInput
                       placeholder={'Username'}
                       inputStyle={'w-full'}
+                      inputType={'text'}
+                      id={'username'}
+                      name={'username'}
+                      value={formik.values.username}
+                      onChange={formik.handleChange}
+                      isError={
+                        formik.touched.username && formik.errors.username
+                      }
+                      textError={formik.errors.username}
+                      onBlur={formik.handleBlur}
                     />
                     <CustomInput
                       placeholder={'Nomor Telpon'}
                       inputStyle={'w-full'}
+                      inputType={'number'}
+                      id={'nomorTelpon'}
+                      name={'nomorTelpon'}
+                      value={formik.values.nomorTelpon}
+                      onChange={formik.handleChange}
+                      isError={
+                        formik.touched.nomorTelpon && formik.errors.nomorTelpon
+                      }
+                      textError={formik.errors.nomorTelpon}
+                      onBlur={formik.handleBlur}
                     />
                     <div className="flex w-full space-x-3">
                       <CustomInput
                         placeholder={'Password'}
-                        inputStyle={'w-[50%]'}
+                        inputStyle={'w-full'}
+                        inputType={'password'}
+                        id={'password'}
+                        name={'password'}
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        isError={
+                          formik.touched.password && formik.errors.password
+                        }
+                        textError={formik.errors.password}
+                        onBlur={formik.handleBlur}
                       />
                       <CustomInput
                         placeholder={'Konfirmasi Password'}
-                        inputStyle={'w-[50%]'}
+                        inputStyle={'w-full'}
+                        inputType={'password'}
+                        id={'confirmPassword'}
+                        name={'confirmPassword'}
+                        value={formik.values.confirmPassword}
+                        onChange={formik.handleChange}
+                        isError={
+                          formik.touched.confirmPassword && formik.errors.confirmPassword
+                        }
+                        textError={formik.errors.confirmPassword}
+                        onBlur={formik.handleBlur}
                       />
                     </div>
                     <div className="w-full">
@@ -121,11 +205,11 @@ const Register = () => {
                     <div className="flex w-full space-x-3">
                       <CustomInput
                         placeholder={'Password'}
-                        inputStyle={'w-[50%]'}
+                        inputStyle={'w-full'}
                       />
                       <CustomInput
                         placeholder={'Konfirmasi Password'}
-                        inputStyle={'w-[50%]'}
+                        inputStyle={'w-full'}
                       />
                     </div>
                     <div className="w-full">

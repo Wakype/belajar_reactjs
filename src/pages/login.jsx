@@ -1,9 +1,28 @@
 import React from 'react';
 import { FaGoogle, FaFacebook, FaApple } from 'react-icons/fa';
 import { CustomButton, CustomInput, SosmedLog } from '../components';
+import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
+import * as Yup from 'yup';
 import { NavLink } from 'react-router-dom';
 
 const Login = () => {
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: Yup.object().shape({
+      email: Yup.string().email('Email salah').required('Email wajib diisi'),
+      password: Yup.string()
+        .min(8, 'Password minimal 8 huruf')
+        .required('Password wajib diisi'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+      // formik.resetForm();
+      // return navigate("/outlet/createOutlet", { replace: true });
+    },
+  });
   return (
     <section className="bg-black h-screen">
       <header className="px-[30px] h-[10%]">
@@ -41,15 +60,38 @@ const Login = () => {
             </p>
           </div>
 
-          <div className="w-full justify-center flex">
+          <form
+            className="w-full justify-center flex"
+            onSubmit={formik.handleSubmit}
+          >
             <div className="flex justify-between items-center w-[1000px]">
               <div className="space-y-3 w-[400px]">
                 <CustomInput
                   placeholder={'Alamat Email'}
                   inputStyle={'w-full'}
+                  inputType={'email'}
+                  id={'email'}
+                  name={'email'}
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  isError={formik.touched.email && formik.errors.email}
+                  textError={formik.errors.email}
+                  onBlur={formik.handleBlur}
                 />
-                <CustomInput placeholder={'Password'} inputStyle={'w-full'} />
+                <CustomInput
+                  placeholder={'Password'}
+                  value={formik.values.password}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  isError={formik.touched.password && formik.errors.password}
+                  textError={formik.errors.password}
+                  inputStyle={'w-full'}
+                  id={'password'}
+                  name={'password'}
+                  inputType={'password'}
+                />
                 <CustomButton
+                  type={'submit'}
                   label={'Login'}
                   stylingP={'text-black'}
                   stylingButton={
@@ -71,17 +113,23 @@ const Login = () => {
                 <SosmedLog
                   label={'Masuk dengan Google'}
                   icon={<FaGoogle color="white" size={22} />}
-                  stylingDiv={'border-[#00c29a] space-x-5 hover:bg-[#00c29a] justify-start'}
+                  stylingDiv={
+                    'border-[#00c29a] space-x-5 hover:bg-[#00c29a] justify-start'
+                  }
                 />
                 <SosmedLog
                   label={'Masuk dengan Facebook'}
                   icon={<FaFacebook color="white" size={22} />}
-                  stylingDiv={'border-[#00c29a] space-x-5 hover:bg-[#00c29a] justify-start'}
+                  stylingDiv={
+                    'border-[#00c29a] space-x-5 hover:bg-[#00c29a] justify-start'
+                  }
                 />
                 <SosmedLog
                   label={'Masuk dengan Apple Account'}
                   icon={<FaApple color="white" size={22} />}
-                  stylingDiv={'border-[#00c29a] space-x-5 hover:bg-[#00c29a] justify-start'}
+                  stylingDiv={
+                    'border-[#00c29a] space-x-5 hover:bg-[#00c29a] justify-start'
+                  }
                 />
                 <div className="flex justify-end">
                   <NavLink to={'/register'}>
@@ -92,7 +140,7 @@ const Login = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </section>
         <section className=" h-[10%] px-[30px]">
           <div className="flex justify-between items-center h-full">
