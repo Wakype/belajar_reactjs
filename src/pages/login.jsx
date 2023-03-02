@@ -1,31 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaGoogle, FaFacebook, FaApple } from 'react-icons/fa';
 import { CustomButton, CustomInput, SosmedLog } from '../components';
 import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
 import * as Yup from 'yup';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      email: '',
+      namaPetugas: '',
+      namaLengkap: '',
       password: '',
     },
     validationSchema: Yup.object().shape({
-      email: Yup.string().email('Email salah').required('Email wajib diisi'),
+      namaLengkap: Yup.string()
+        .min(2, 'Nama minimal 2 huruf')
+        .required('Nama Lengkap wajib diisi'),
+      namaPetugas: Yup.string()
+        .min(2, 'Nama minimal 2 huruf')
+        .required('Nama Lengkap wajib diisi'),
       password: Yup.string()
         .min(8, 'Password minimal 8 huruf')
         .required('Password wajib diisi'),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      // formik.resetForm();
-      // return navigate("/outlet/createOutlet", { replace: true });
+      try {
+        setIsLoading(true)
+      } catch (err) {
+        console.log('authLoginErr =>', err);
+      } finally {
+        setIsLoading(false)
+      }
     },
   });
   return (
     <section className="bg-black h-screen">
-      <header className="px-[30px] h-[10%]">
+      <header className="px-[30px] h-[8%]">
         <section className="justify-between flex items-center h-full">
           <div className=" logoT cursor-pointer text-[45px] bg-clip-text text-transparent bg-gradient-to-r from-[#00c29a] to-[#e8cd70]">
             Lelang<span className="text-[25px] logoT">Pro</span>
@@ -44,7 +56,7 @@ const Login = () => {
         </section>
       </header>
 
-      <body className="h-[90%] pt-[100px]">
+      <body className="h-[92%] pt-[100px]">
         <section className=" h-[90%] px-[30px]">
           <div className="flex flex-col items-center w-full mb-[50px]">
             <h1 className="text-[50px] logoT tracking-wide uppercase">

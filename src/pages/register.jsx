@@ -1,47 +1,188 @@
-import React from 'react';
-import { CustomButton, CustomInput, SosmedLog } from '../components';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {
+  CustomButton,
+  CustomInput,
+  CustomSelect,
+  SosmedLog,
+} from '../components';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FaApple, FaFacebook, FaGoogle } from 'react-icons/fa';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
 import * as Yup from 'yup';
+import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import { authRegister } from '../redux/action/authAction';
+import { getBarang } from '../api/barangApi';
 
 const Register = () => {
-  const formik = useFormik({
+  const [isLoading, setIsLoading] = useState(false);
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
+
+  const formikMasyarakat = useFormik({
     initialValues: {
       namaLengkap: '',
       username: '',
-      nomorTelpon: '',
+      telp: '',
       password: '',
-      confirmPassword: '',
+      confirmPasswordMasyarakat: '',
     },
     validationSchema: Yup.object().shape({
       namaLengkap: Yup.string()
-        .min(2, 'Password minimal 2 huruf')
+        .min(2, 'Nama minimal 2 huruf')
         .required('Nama Lengkap wajib diisi'),
       username: Yup.string()
         .min(4, 'Username minimal 4 huruf')
         .required('Username wajib diisi'),
-      nomorTelpon: Yup.string()
+      telp: Yup.string()
         .min(10, 'Nomor Telpon minimal 10 huruf')
         .required('Nomor Telpon wajib diisi'),
-      email: Yup.string().email('Email salah').required('Email wajib diisi'),
       password: Yup.string()
         .min(8, 'Password minimal 8 huruf')
         .required('Password wajib diisi'),
-      confirmPassword: Yup.string()
+      confirmPasswordMasyarakat: Yup.string()
         .min(8, 'Password minimal 8 huruf')
         .required('Password wajib diisi'),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      // formik.resetForm();
-      // return navigate("/outlet/createOutlet", { replace: true });
+
+      console.log('object', values)
+      const handleSubmit = async (e) => {
+        try {
+          setIsLoading(true);
+          // alert(JSON.stringify(values, null, 2));
+
+          const response = await dispatch(authRegister(values));
+          console.log(response);
+          if (response?.status === 'Success') {
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: response?.msg,
+            });
+            return navigate('/login', { replace: true });
+          }
+
+          // if (response?.response?.data?.status === 'Fail') {
+          //   const Toast = Swal.mixin({
+          //     toast: true,
+          //     position: 'top-end',
+          //     showConfirmButton: false,
+          //     timer: 3000,
+          //     timerProgressBar: true,
+          //     didOpen: (toast) => {
+          //       toast.addEventListener('mouseenter', Swal.stopTimer);
+          //       toast.addEventListener('mouseleave', Swal.resumeTimer);
+          //     },
+          //   });
+
+          //   Toast.fire({
+          //     icon: 'error',
+          //     title: response?.response?.data?.msg,
+          //   });
+          // }
+        } catch (err) {
+          console.log('authregisterErr =>', err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      handleSubmit();
     },
   });
+
+  const formikPetugas = useFormik({
+    initialValues: {
+      namaPetugas: '',
+      username: '',
+      password: '',
+      confirmPasswordPetugas: '',
+      role: '',
+    },
+    validationSchema: Yup.object().shape({
+      namaPetugas: Yup.string()
+        .min(2, 'Nama minimal 2 huruf')
+        .required('Nama Lengkap wajib diisi'),
+      username: Yup.string()
+        .min(4, 'Username minimal 4 huruf')
+        .required('Username wajib diisi'),
+      password: Yup.string()
+        .min(8, 'Password minimal 8 huruf')
+        .required('Password wajib diisi'),
+      confirmPasswordPetugas: Yup.string()
+        .min(8, 'Password minimal 8 huruf')
+        .required('Password wajib diisi'),
+    }),
+    onSubmit: (values) => {
+      const handleSubmit = async (e) => {
+        try {
+          setIsLoading(true);
+          const response = await dispatch(authRegister(values));
+          // const data = response.response;
+          if (response?.status === 'Success') {
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: response?.msg,
+            });
+            return navigate('/login', { replace: true });
+          }
+          // if (response?.response?.data?.status === 'Fail') {
+          //   const Toast = Swal.mixin({
+          //     toast: true,
+          //     position: 'top-end',
+          //     showConfirmButton: false,
+          //     timer: 3000,
+          //     timerProgressBar: true,
+          //     didOpen: (toast) => {
+          //       toast.addEventListener('mouseenter', Swal.stopTimer);
+          //       toast.addEventListener('mouseleave', Swal.resumeTimer);
+          //     },
+          //   });
+
+          //   Toast.fire({
+          //     icon: 'error',
+          //     title: response?.response?.data?.msg,
+          //   });
+          // }
+        } catch (err) {
+          console.log('authregisterErr =>', err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      handleSubmit();
+    },
+  });
+
+
+  useEffect(() => {}, []);
   return (
     <section className="bg-black h-screen">
-      <header className="px-[30px] h-[10%]">
+      <header className="px-[30px] h-[8%]">
         <section className="justify-between flex items-center h-full">
           <NavLink to={'/login'}>
             <div className=" logoT cursor-pointer text-[45px] bg-clip-text text-transparent bg-gradient-to-r from-[#00c29a] to-[#e8cd70]">
@@ -52,7 +193,7 @@ const Register = () => {
       </header>
 
       <body className="h-[90%] pt-[50px]">
-        <section className="h-[90%] px-[30px]">
+        <section className="h-[92%] px-[30px]">
           <div className="w-full justify-center flex ">
             <div className="flex flex-col  justify-between items-center border border-[#00c29a] p-7 w-[500px] rounded">
               <div className="mb-5">
@@ -83,171 +224,252 @@ const Register = () => {
                     </Tab>
                   </TabList>
 
-                  <TabPanel className={'w-full space-y-5 mt-5'}>
-                    <CustomInput
-                      placeholder={'Nama Lengkap'}
-                      inputStyle={'w-full'}
-                      inputType={'text'}
-                      id={'namaLengkap'}
-                      name={'namaLengkap'}
-                      value={formik.values.namaLengkap}
-                      onChange={formik.handleChange}
-                      isError={
-                        formik.touched.namaLengkap && formik.errors.namaLengkap
-                      }
-                      textError={formik.errors.namaLengkap}
-                      onBlur={formik.handleBlur}
-                    />
-                    <CustomInput
-                      placeholder={'Username'}
-                      inputStyle={'w-full'}
-                      inputType={'text'}
-                      id={'username'}
-                      name={'username'}
-                      value={formik.values.username}
-                      onChange={formik.handleChange}
-                      isError={
-                        formik.touched.username && formik.errors.username
-                      }
-                      textError={formik.errors.username}
-                      onBlur={formik.handleBlur}
-                    />
-                    <CustomInput
-                      placeholder={'Nomor Telpon'}
-                      inputStyle={'w-full'}
-                      inputType={'number'}
-                      id={'nomorTelpon'}
-                      name={'nomorTelpon'}
-                      value={formik.values.nomorTelpon}
-                      onChange={formik.handleChange}
-                      isError={
-                        formik.touched.nomorTelpon && formik.errors.nomorTelpon
-                      }
-                      textError={formik.errors.nomorTelpon}
-                      onBlur={formik.handleBlur}
-                    />
-                    <div className="flex w-full space-x-3">
+                  <TabPanel className={'w-full '}>
+                    <form
+                      action=""
+                      onSubmit={formikMasyarakat.handleSubmit}
+                      className="w-full space-y-5 mt-5"
+                    >
                       <CustomInput
-                        placeholder={'Password'}
+                        placeholder={'Nama Lengkap'}
                         inputStyle={'w-full'}
-                        inputType={'password'}
-                        id={'password'}
-                        name={'password'}
-                        value={formik.values.password}
-                        onChange={formik.handleChange}
+                        inputType={'text'}
+                        id={'namaLengkap'}
+                        name={'namaLengkap'}
+                        value={formikMasyarakat.values.namaLengkap}
+                        onChange={formikMasyarakat.handleChange}
                         isError={
-                          formik.touched.password && formik.errors.password
+                          formikMasyarakat.touched.namaLengkap &&
+                          formikMasyarakat.errors.namaLengkap
                         }
-                        textError={formik.errors.password}
-                        onBlur={formik.handleBlur}
+                        textError={formikMasyarakat.errors.namaLengkap}
+                        onBlur={formikMasyarakat.handleBlur}
                       />
                       <CustomInput
-                        placeholder={'Konfirmasi Password'}
+                        placeholder={'Username'}
                         inputStyle={'w-full'}
-                        inputType={'password'}
-                        id={'confirmPassword'}
-                        name={'confirmPassword'}
-                        value={formik.values.confirmPassword}
-                        onChange={formik.handleChange}
+                        inputType={'text'}
+                        id={'username'}
+                        name={'username'}
+                        value={formikMasyarakat.values.username}
+                        onChange={formikMasyarakat.handleChange}
                         isError={
-                          formik.touched.confirmPassword && formik.errors.confirmPassword
+                          formikMasyarakat.touched.username &&
+                          formikMasyarakat.errors.username
                         }
-                        textError={formik.errors.confirmPassword}
-                        onBlur={formik.handleBlur}
+                        textError={formikMasyarakat.errors.username}
+                        onBlur={formikMasyarakat.handleBlur}
                       />
-                    </div>
-                    <div className="w-full">
-                      <CustomButton
-                        label={'Buat Akun'}
-                        stylingP={'text-black'}
-                        stylingButton={
-                          'w-full mb-1 py-3 border-none bg-gradient-to-r from-[#00c29a] to-[#e8cd70] hover:to-[#00c29a] hover:from-[#e8cd70]'
+                      <CustomInput
+                        placeholder={'Nomor Telpon'}
+                        inputStyle={'w-full'}
+                        inputType={'number'}
+                        id={'telp'}
+                        name={'telp'}
+                        value={formikMasyarakat.values.telp}
+                        onChange={formikMasyarakat.handleChange}
+                        isError={
+                          formikMasyarakat.touched.telp &&
+                          formikMasyarakat.errors.telp
                         }
+                        textError={formikMasyarakat.errors.telp}
+                        onBlur={formikMasyarakat.handleBlur}
                       />
-                      <div className="w-full flex justify-center">
-                        <NavLink to={'/login'} className={''}>
-                          <p className="text-white underline italic cursor-pointer hover:text-[#88898e] transition-all ease-in-out w-fit text-[13px]">
-                            Sudah punya akun?
-                          </p>
-                        </NavLink>
+                      <div className="flex w-full space-x-3">
+                        <CustomInput
+                          placeholder={'Password'}
+                          inputStyle={'w-full'}
+                          inputType={'password'}
+                          id={'password'}
+                          name={'password'}
+                          value={formikMasyarakat.values.password}
+                          onChange={formikMasyarakat.handleChange}
+                          isError={
+                            formikMasyarakat.touched.password &&
+                            formikMasyarakat.errors.password
+                          }
+                          textError={formikMasyarakat.errors.password}
+                          onBlur={formikMasyarakat.handleBlur}
+                        />
+                        <CustomInput
+                          placeholder={'Konfirmasi Password'}
+                          inputStyle={'w-full'}
+                          inputType={'password'}
+                          id={'confirmPasswordMasyarakat'}
+                          name={'confirmPasswordMasyarakat'}
+                          value={
+                            formikMasyarakat.values.confirmPasswordMasyarakat
+                          }
+                          onChange={formikMasyarakat.handleChange}
+                          isError={
+                            formikMasyarakat.touched
+                              .confirmPasswordMasyarakat &&
+                            formikMasyarakat.errors.confirmPasswordMasyarakat
+                          }
+                          textError={
+                            formikMasyarakat.errors.confirmPasswordMasyarakat
+                          }
+                          onBlur={formikMasyarakat.handleBlur}
+                        />
                       </div>
-                    </div>
-                    <div className="flex justify-between w-full">
-                      <SosmedLog
-                        icon={<FaGoogle color="white" size={22} />}
-                        stylingDiv={
-                          'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
-                        }
-                      />
-                      <SosmedLog
-                        icon={<FaFacebook color="white" size={22} />}
-                        stylingDiv={
-                          'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
-                        }
-                      />
-                      <SosmedLog
-                        icon={<FaApple color="white" size={22} />}
-                        stylingDiv={
-                          'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
-                        }
-                      />
-                    </div>
+                      <div className="w-full">
+                        <CustomButton
+                          type={'submit'}
+                          label={'Buat Akun'}
+                          stylingP={'text-black'}
+                          stylingButton={
+                            'w-full mb-1 py-3 border-none bg-gradient-to-r from-[#00c29a] to-[#e8cd70] hover:to-[#00c29a] hover:from-[#e8cd70]'
+                          }
+                        />
+                        <div className="w-full flex justify-center">
+                          <NavLink to={'/login'} className={''}>
+                            <p className="text-white underline italic cursor-pointer hover:text-[#88898e] transition-all ease-in-out w-fit text-[13px]">
+                              Sudah punya akun?
+                            </p>
+                          </NavLink>
+                        </div>
+                      </div>
+                      <div className="flex justify-between w-full">
+                        <SosmedLog
+                          icon={<FaGoogle color="white" size={22} />}
+                          stylingDiv={
+                            'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
+                          }
+                        />
+                        <SosmedLog
+                          icon={<FaFacebook color="white" size={22} />}
+                          stylingDiv={
+                            'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
+                          }
+                        />
+                        <SosmedLog
+                          icon={<FaApple color="white" size={22} />}
+                          stylingDiv={
+                            'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
+                          }
+                        />
+                      </div>
+                    </form>
                   </TabPanel>
-                  <TabPanel className={'w-full space-y-5'}>
-                    <CustomInput
-                      placeholder={'Nama Lengkap'}
-                      inputStyle={'w-full'}
-                    />
-                    <CustomInput
-                      placeholder={'Username'}
-                      inputStyle={'w-full'}
-                    />
-                    <div className="flex w-full space-x-3">
+                  <TabPanel className={'w-full '}>
+                    <form
+                      action=""
+                      className="space-y-5 mt-5 w-full"
+                      onSubmit={formikPetugas.handleSubmit}
+                    >
                       <CustomInput
-                        placeholder={'Password'}
+                        placeholder={'Nama Petugas'}
                         inputStyle={'w-full'}
-                      />
-                      <CustomInput
-                        placeholder={'Konfirmasi Password'}
-                        inputStyle={'w-full'}
-                      />
-                    </div>
-                    <div className="w-full">
-                      <CustomButton
-                        label={'Buat Akun'}
-                        stylingP={'text-black'}
-                        stylingButton={
-                          'w-full mb-1 py-3 border-none bg-gradient-to-r from-[#00c29a] to-[#e8cd70] hover:to-[#00c29a] hover:from-[#e8cd70]'
+                        inputType={'text'}
+                        id={'namaPetugas'}
+                        name={'namaPetugas'}
+                        value={formikPetugas.values.namaPetugas}
+                        onChange={formikPetugas.handleChange}
+                        isError={
+                          formikPetugas.touched.namaPetugas &&
+                          formikPetugas.errors.namaPetugas
                         }
+                        textError={formikPetugas.errors.namaPetugas}
+                        onBlur={formikPetugas.handleBlur}
                       />
-                      <div className="w-full flex justify-center">
-                        <NavLink to={'/login'} className={''}>
-                          <p className="text-white underline italic cursor-pointer hover:text-[#88898e] transition-all ease-in-out w-fit text-[13px]">
-                            Sudah punya akun?
-                          </p>
-                        </NavLink>
+                      <CustomInput
+                        placeholder={'Username'}
+                        inputStyle={'w-full'}
+                        inputType={'text'}
+                        id={'username'}
+                        name={'username'}
+                        value={formikPetugas.values.username}
+                        onChange={formikPetugas.handleChange}
+                        isError={
+                          formikPetugas.touched.username &&
+                          formikPetugas.errors.username
+                        }
+                        textError={formikPetugas.errors.username}
+                        onBlur={formikPetugas.handleBlur}
+                      />
+                      <div className="flex w-full space-x-3">
+                        <CustomInput
+                          placeholder={'Password'}
+                          inputStyle={'w-full'}
+                          inputType={'password'}
+                          id={'password'}
+                          name={'password'}
+                          value={formikPetugas.values.password}
+                          onChange={formikPetugas.handleChange}
+                          isError={
+                            formikPetugas.touched.password &&
+                            formikPetugas.errors.password
+                          }
+                          textError={formikPetugas.errors.password}
+                          onBlur={formikPetugas.handleBlur}
+                        />
+                        <CustomInput
+                          placeholder={'Konfirmasi Password'}
+                          inputStyle={'w-full'}
+                          inputType={'password'}
+                          id={'confirmPasswordPetugas'}
+                          name={'confirmPasswordPetugas'}
+                          value={formikPetugas.values.confirmPasswordPetugas}
+                          onChange={formikPetugas.handleChange}
+                          isError={
+                            formikPetugas.touched.confirmPasswordPetugas &&
+                            formikPetugas.errors.confirmPasswordPetugas
+                          }
+                          textError={
+                            formikPetugas.errors.confirmPasswordPetugas
+                          }
+                          onBlur={formikPetugas.handleBlur}
+                        />
                       </div>
-                    </div>
-                    <div className="flex justify-between w-full">
-                      <SosmedLog
-                        icon={<FaGoogle color="white" size={22} />}
-                        stylingDiv={
-                          'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
-                        }
-                      />
-                      <SosmedLog
-                        icon={<FaFacebook color="white" size={22} />}
-                        stylingDiv={
-                          'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
-                        }
-                      />
-                      <SosmedLog
-                        icon={<FaApple color="white" size={22} />}
-                        stylingDiv={
-                          'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
-                        }
-                      />
-                    </div>
+                      <CustomSelect
+                        id={'role'}
+                        name={'role'}
+                        value={formikPetugas.values.role}
+                        onBlur={formikPetugas.handleBlur}
+                        onChange={formikPetugas.handleChange}
+                        selectStyle={'w-full'}
+                      >
+                        <option value="1">Administrator</option>
+                        <option value="2">Petugas</option>
+                      </CustomSelect>
+                      <div className="w-full">
+                        <CustomButton
+                          type={'submit'}
+                          label={'Buat Akun'}
+                          stylingP={'text-black'}
+                          stylingButton={
+                            'w-full mb-1 py-3 border-none bg-gradient-to-r from-[#00c29a] to-[#e8cd70] hover:to-[#00c29a] hover:from-[#e8cd70]'
+                          }
+                        />
+                        <div className="w-full flex justify-center">
+                          <NavLink to={'/login'} className={''}>
+                            <p className="text-white underline italic cursor-pointer hover:text-[#88898e] transition-all ease-in-out w-fit text-[13px]">
+                              Sudah punya akun?
+                            </p>
+                          </NavLink>
+                        </div>
+                      </div>
+                      <div className="flex justify-between w-full">
+                        <SosmedLog
+                          icon={<FaGoogle color="white" size={22} />}
+                          stylingDiv={
+                            'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
+                          }
+                        />
+                        <SosmedLog
+                          icon={<FaFacebook color="white" size={22} />}
+                          stylingDiv={
+                            'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
+                          }
+                        />
+                        <SosmedLog
+                          icon={<FaApple color="white" size={22} />}
+                          stylingDiv={
+                            'border-[#00c29a] hover:bg-[#00c29a] w-[120px] justify-center'
+                          }
+                        />
+                      </div>
+                    </form>
                   </TabPanel>
                 </Tabs>
               </div>
