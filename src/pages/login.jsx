@@ -4,35 +4,86 @@ import { CustomButton, CustomInput, SosmedLog } from '../components';
 import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import { authLogin } from '../redux/action/authAction';
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
-      namaPetugas: '',
-      namaLengkap: '',
+      username: '',
       password: '',
     },
     validationSchema: Yup.object().shape({
-      namaLengkap: Yup.string()
-        .min(2, 'Nama minimal 2 huruf')
-        .required('Nama Lengkap wajib diisi'),
-      namaPetugas: Yup.string()
-        .min(2, 'Nama minimal 2 huruf')
-        .required('Nama Lengkap wajib diisi'),
       password: Yup.string()
         .min(8, 'Password minimal 8 huruf')
         .required('Password wajib diisi'),
+      username: Yup.string()
+        .min(4, 'Username minimal 4 huruf')
+        .required('Username wajib diisi'),
     }),
     onSubmit: (values) => {
-      try {
-        setIsLoading(true)
-      } catch (err) {
-        console.log('authLoginErr =>', err);
-      } finally {
-        setIsLoading(false)
-      }
+      console.log('object', values);
+      const handleSubmit = async (e) => {
+        try {
+          setIsLoading(true);
+          // alert(JSON.stringify(values, null, 2));
+
+          const response = await dispatch(authLogin(values));
+
+          if (response?.status === 'Success') {
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+              icon: 'success',
+              title: response?.msg,
+            });
+
+            if (response?.user?.namaPetugas === values.username) {
+              return navigate('/admin/dashboard/barang', { replace: true });
+            } else {
+              return navigate('/beranda', { replace: true });
+            }
+          }
+
+          // if (response?.response?.data?.status === 'Fail') {
+          //   const Toast = Swal.mixin({
+          //     toast: true,
+          //     position: 'top-end',
+          //     showConfirmButton: false,
+          //     timer: 3000,
+          //     timerProgressBar: true,
+          //     didOpen: (toast) => {
+          //       toast.addEventListener('mouseenter', Swal.stopTimer);
+          //       toast.addEventListener('mouseleave', Swal.resumeTimer);
+          //     },
+          //   });
+
+          //   Toast.fire({
+          //     icon: 'error',
+          //     title: response?.response?.data?.msg,
+          //   });
+          // }
+        } catch (err) {
+          console.log('authregisterErr =>', err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      handleSubmit();
     },
   });
   return (
@@ -79,15 +130,15 @@ const Login = () => {
             <div className="flex justify-between items-center w-[1000px]">
               <div className="space-y-3 w-[400px]">
                 <CustomInput
-                  placeholder={'Alamat Email'}
+                  placeholder={'Username'}
                   inputStyle={'w-full'}
-                  inputType={'email'}
-                  id={'email'}
-                  name={'email'}
-                  value={formik.values.email}
+                  inputType={'username'}
+                  id={'username'}
+                  name={'username'}
+                  value={formik.values.username}
                   onChange={formik.handleChange}
-                  isError={formik.touched.email && formik.errors.email}
-                  textError={formik.errors.email}
+                  isError={formik.touched.username && formik.errors.username}
+                  textError={formik.errors.username}
                   onBlur={formik.handleBlur}
                 />
                 <CustomInput
