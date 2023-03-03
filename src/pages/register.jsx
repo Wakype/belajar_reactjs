@@ -429,6 +429,7 @@ const Register = () => {
                         onChange={formikPetugas.handleChange}
                         selectStyle={'w-full'}
                       >
+                        <option value="">Pilih Role</option>
                         <option value="1">Administrator</option>
                         <option value="2">Petugas</option>
                       </CustomSelect>

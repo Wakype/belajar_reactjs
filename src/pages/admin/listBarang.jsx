@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { CustomButton } from '../components';
+import { CustomButton } from '../../components';
 
 const ListBarang = () => {
   let navigate = useNavigate();

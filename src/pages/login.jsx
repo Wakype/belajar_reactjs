@@ -33,7 +33,8 @@ const Login = () => {
           // alert(JSON.stringify(values, null, 2));
 
           const response = await dispatch(authLogin(values));
-
+          console.log('responnya', response);
+          console.log('nama', values.username);
           if (response?.status === 'Success') {
             const Toast = Swal.mixin({
               toast: true,
@@ -52,7 +53,7 @@ const Login = () => {
               title: response?.msg,
             });
 
-            if (response?.user?.namaPetugas === values.username) {
+            if (response?.user?.id_level === 1 || response?.user?.id_level === 2) {
               return navigate('/admin/dashboard/barang', { replace: true });
             } else {
               return navigate('/beranda', { replace: true });

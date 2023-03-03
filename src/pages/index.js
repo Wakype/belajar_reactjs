@@ -1,12 +1,12 @@
 
-import AdminDashboard from "./adminDashboard";
+import AdminDashboard from "./admin/adminDashboard";
 import DetailLelang from "./detailLelang";
 import HomeMasyarakat from "./homeMasyarakat";
-import ListBarang from "./listBarang";
+import ListBarang from "./admin/listBarang";
 import Login from "./login";
 import Penawaran from "./penawaran";
 import Register from "./register";
-import TambahBarang from "./tambahBarang";
+import TambahBarang from "./admin/tambahBarang";
 
 export {
   HomeMasyarakat,
