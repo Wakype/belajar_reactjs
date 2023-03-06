@@ -7,6 +7,7 @@ const CustomInput = ({
   inputStyle,
   placeholder,
   isError,
+  maxLength,
   textError,
   ...props
 }) => {
@@ -15,6 +16,7 @@ const CustomInput = ({
       <input
         {...props}
         type={inputType}
+        maxLength={maxLength}
         name={name}
         id={id}
         placeholder={placeholder}

@@ -10,6 +10,7 @@ const CustomTextArea = ({
   placeholder,
   isError,
   textError,
+  maxLength,
   ...props
 }) => {
   return (
@@ -18,6 +19,7 @@ const CustomTextArea = ({
         {...props}
         name={name}
         id={id}
+        maxLength={maxLength}
         cols={cols}
         rows={rows}
         placeholder={placeholder}

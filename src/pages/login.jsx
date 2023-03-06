@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaGoogle, FaFacebook, FaApple } from 'react-icons/fa';
 import { CustomButton, CustomInput, SosmedLog } from '../components';
 import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
@@ -7,6 +7,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
 import { authLogin } from '../redux/action/authAction';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -53,31 +54,25 @@ const Login = () => {
               title: response?.msg,
             });
 
-            if (response?.user?.id_level === 1 || response?.user?.id_level === 2) {
-              return navigate('/admin/dashboard/barang', { replace: true });
-            } else {
+            if (response?.user?.id_level === undefined) {
               return navigate('/beranda', { replace: true });
+            } else {
+              return navigate('/admin/dashboard/barang', { replace: true });
             }
           }
 
-          // if (response?.response?.data?.status === 'Fail') {
-          //   const Toast = Swal.mixin({
-          //     toast: true,
-          //     position: 'top-end',
-          //     showConfirmButton: false,
-          //     timer: 3000,
-          //     timerProgressBar: true,
-          //     didOpen: (toast) => {
-          //       toast.addEventListener('mouseenter', Swal.stopTimer);
-          //       toast.addEventListener('mouseleave', Swal.resumeTimer);
-          //     },
-          //   });
-
-          //   Toast.fire({
-          //     icon: 'error',
-          //     title: response?.response?.data?.msg,
-          //   });
-          // }
+          if (response?.response?.data?.status === 'Fail') {
+            toast.error(response?.response?.data?.msg, {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+            });
+          }
         } catch (err) {
           console.log('authregisterErr =>', err);
         } finally {
@@ -132,7 +127,7 @@ const Login = () => {
               <div className="space-y-3 w-[400px]">
                 <CustomInput
                   placeholder={'Username'}
-                  inputStyle={'w-full'}
+                  inputStyle={`w-full ${formik.touched.username && formik.errors.username ? 'bg-red-500 opacity-80' : undefined}`}
                   inputType={'username'}
                   id={'username'}
                   name={'username'}

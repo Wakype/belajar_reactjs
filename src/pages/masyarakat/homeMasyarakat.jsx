@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardLelang, CustomButton, CustomHeader } from '../components';
+import { CardLelang, CustomButton, CustomHeader } from '../../components';
 import { NavLink } from 'react-router-dom';
 
 const HomeMasyarakat = () => {

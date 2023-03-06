@@ -11,10 +11,12 @@ export function authLogin(payload) {
 
       dispatch({
         type: 'login',
+        id: data?.user?.id,
         namaLengkap: data?.user?.namaLengkap,
         namaPetugas: data?.user?.namaPetugas,
         username: data?.user?.username,
         password: data?.user?.password,
+        role: data?.user?.role?.level,
         telp: data?.user?.telp,
         id_level: data?.user?.id_level,
         token: data?.token,
@@ -55,9 +57,11 @@ export function authMe(payload) {
 
       dispatch({
         type: 'login',
+        id: data?.user?.id,
         namaLengkap: data?.user?.namaLengkap,
         namaPetugas: data?.user?.namaPetugas,
         username: data?.user?.username,
+        role: data?.user?.role?.level,
         password: data?.user?.password,
         telp: data?.user?.telp,
         id_level: data?.user?.id_level,

@@ -1,10 +1,8 @@
 import React from 'react';
-import { FaUserAlt } from 'react-icons/fa';
-import { FiLogOut } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
-import { CustomHeader } from '../components';
+import { CustomHeader } from '../../components';
 
-const DetailLelang = () => {
+const Penawaran = () => {
   return (
     <section>
       <header className="px-[30px] h-[85px] bg-black sticky top-0 z-50">
@@ -16,4 +14,4 @@ const DetailLelang = () => {
   );
 };
 
-export default DetailLelang;
+export default Penawaran;

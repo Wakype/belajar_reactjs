@@ -18,7 +18,7 @@ const client = axios.create({
   
     (error) => {
       console.log("err", error);
-      if (401 === error?.response.status) {
+      if (401 === error?.response?.status) {
         Cookies.remove("myapps_token");
   
         clearToken();

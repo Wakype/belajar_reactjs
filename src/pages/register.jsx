@@ -430,8 +430,8 @@ const Register = () => {
                         selectStyle={'w-full'}
                       >
                         <option value="">Pilih Role</option>
-                        <option value="1">Administrator</option>
-                        <option value="2">Petugas</option>
+                        <option value="administrator">Administrator</option>
+                        <option value="petugas">Petugas</option>
                       </CustomSelect>
                       <div className="w-full">
                         <CustomButton
