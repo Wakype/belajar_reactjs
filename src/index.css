@@ -18,21 +18,38 @@ code {
     monospace;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 * {
   font-family: 'Poppins', sans-serif;
 }
 h1,
-p, table, th, td {
+p,
+table,
+th,
+td {
   color: white;
+  font-family: 'Poppins', sans-serif;
 }
 .logoT {
   font-family: 'Tungsten Bold' !important;
 }
-
 
 .changeColor {
   color: white;
 }
 .changeColor:hover {
   color: black;
+}
+
+tr:nth-child(even) {
+  background-color: #00c29b2f;
+}
+
+.hijau {
+  color: #00c29a;
 }

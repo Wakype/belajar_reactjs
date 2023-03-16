@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionTambahBarang } from '../../redux/action/barangAction';
+import { toast } from 'react-toastify';
 
 const TambahBarang = () => {
   let navigate = useNavigate();
@@ -39,26 +40,18 @@ const TambahBarang = () => {
       console.log('object', values);
       const handleSubmit = async (e) => {
         try {
-          // alert(JSON.stringify(values, null, 2));
-
           const response = await dispatch(actionTambahBarang(values));
-          console.log('responnya', response);
+          console.log('tambah barang', response);
           if (response?.data?.status === 'Success') {
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-              },
-            });
-
-            Toast.fire({
-              icon: 'success',
-              title: response?.data?.msg,
+            toast.success(response?.data?.msg, {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
             });
             return navigate('/admin/dashboard/barang', { replace: true });
           }
@@ -91,8 +84,10 @@ const TambahBarang = () => {
   });
   return (
     <section className="w-full h-screen bg-[#092742] py-[50px] px-[50px]">
-      <div className="mb-[70px]">
-        <h1 className="text-[25px] font-semibold">Tambah Barang</h1>
+      <div className="mb-[70px] bg-[#00c29f] rounded w-[25%]">
+        <h1 className="text-[20px] font-semibold text-center py-1 text-black">
+          Tambah Barang
+        </h1>
       </div>
 
       <div className="w-full">
@@ -106,11 +101,15 @@ const TambahBarang = () => {
         </div>
 
         <div className="w-full ">
-          <form action="" className="space-y-10 flex flex-col w-full" onSubmit={formik.handleSubmit}>
+          <form
+            action=""
+            className="space-y-10 flex flex-col w-full"
+            onSubmit={formik.handleSubmit}
+          >
             <CustomInput
               inputStyle={'w-full border-[#00c29a] border bg-black'}
-              maxLength={25}
-              placeholder={'Nama Barang (Max: 25 Huruf)'}
+              maxLength={70}
+              placeholder={'Nama Barang (Max: 70 Huruf)'}
               id={'namaBarang'}
               name={'namaBarang'}
               value={formik.values.namaBarang}
@@ -125,7 +124,7 @@ const TambahBarang = () => {
               </div>
               <CustomInput
                 inputStyle={'w-full border-[#00c29a] border bg-black'}
-                placeholder={'Harga Barang'}
+                placeholder={'Harga Barang (Min: Rp1.000,-)'}
                 inputType={'number'}
                 id={'hargaAwal'}
                 name={'hargaAwal'}
@@ -138,8 +137,8 @@ const TambahBarang = () => {
             </div>
             <CustomTextArea
               inputStyle={'w-full border-[#00c29a] border bg-black'}
-              placeholder={'Deskripsi Barang (Max: 100 Huruf)'}
-              maxLength={100}
+              placeholder={'Deskripsi Barang (Max: 255 Huruf)'}
+              maxLength={255}
               id={'deskripsiBarang'}
               name={'deskripsiBarang'}
               value={formik.values.deskripsiBarang}
@@ -150,12 +149,27 @@ const TambahBarang = () => {
               textError={formik.errors.deskripsiBarang}
               onBlur={formik.handleBlur}
             />
-            <CustomButton
-              label={'Tambah Barang'}
-              stylingButton={'border border-[#00c29a] py-3 hover:bg-[#00c29a]'}
-              stylingP={'hover:text-black'}
-              type={'submit'}
-            />
+            <div className="flex justify-between space-x-20">
+              <CustomButton
+                onClick={() => {
+                  formik.resetForm();
+                }}
+                type={'button'}
+                label={'Bersihkan form'}
+                stylingP={'hover:text-white text-red-500'}
+                stylingButton={
+                  'border border-red-500 py-3 hover:bg-red-500 w-full'
+                }
+              />
+              <CustomButton
+                type={'submit'}
+                label={'Tambah Barang'}
+                stylingP={'hover:text-black'}
+                stylingButton={
+                  'border border-[#00c29a] py-3 bg-[#00c29a] w-full'
+                }
+              />
+            </div>
           </form>
         </div>
       </div>

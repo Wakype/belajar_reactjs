@@ -11,11 +11,13 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { authRegister } from '../redux/action/authAction';
 import { getBarang } from '../api/barangApi';
+import { toast } from 'react-toastify';
 
 const Register = () => {
+  const redux = useSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(false);
   let dispatch = useDispatch();
   let navigate = useNavigate();
@@ -43,56 +45,42 @@ const Register = () => {
         .required('Password wajib diisi'),
       confirmPasswordMasyarakat: Yup.string()
         .min(8, 'Password minimal 8 huruf')
-        .required('Password wajib diisi'),
+        .required('Password wajib diisi')
+        .oneOf([Yup.ref('password'), null], 'Password harus sama'),
     }),
     onSubmit: (values) => {
-
-      console.log('object', values)
+      console.log('object', values);
       const handleSubmit = async (e) => {
         try {
           setIsLoading(true);
-          // alert(JSON.stringify(values, null, 2));
-
           const response = await dispatch(authRegister(values));
           console.log(response);
           if (response?.status === 'Success') {
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-              },
-            });
-
-            Toast.fire({
-              icon: 'success',
-              title: response?.msg,
+            toast.success(response?.msg, {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
             });
             return navigate('/login', { replace: true });
           }
 
-          // if (response?.response?.data?.status === 'Fail') {
-          //   const Toast = Swal.mixin({
-          //     toast: true,
-          //     position: 'top-end',
-          //     showConfirmButton: false,
-          //     timer: 3000,
-          //     timerProgressBar: true,
-          //     didOpen: (toast) => {
-          //       toast.addEventListener('mouseenter', Swal.stopTimer);
-          //       toast.addEventListener('mouseleave', Swal.resumeTimer);
-          //     },
-          //   });
-
-          //   Toast.fire({
-          //     icon: 'error',
-          //     title: response?.response?.data?.msg,
-          //   });
-          // }
+          if (response?.response?.data?.status === 'Fail') {
+            toast.error(response?.response?.data?.msg, {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+            });
+          }
         } catch (err) {
           console.log('authregisterErr =>', err);
         } finally {
@@ -130,44 +118,31 @@ const Register = () => {
         try {
           setIsLoading(true);
           const response = await dispatch(authRegister(values));
-          // const data = response.response;
           if (response?.status === 'Success') {
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-              },
-            });
-
-            Toast.fire({
-              icon: 'success',
-              title: response?.msg,
+            toast.success(response?.msg, {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
             });
             return navigate('/login', { replace: true });
           }
-          // if (response?.response?.data?.status === 'Fail') {
-          //   const Toast = Swal.mixin({
-          //     toast: true,
-          //     position: 'top-end',
-          //     showConfirmButton: false,
-          //     timer: 3000,
-          //     timerProgressBar: true,
-          //     didOpen: (toast) => {
-          //       toast.addEventListener('mouseenter', Swal.stopTimer);
-          //       toast.addEventListener('mouseleave', Swal.resumeTimer);
-          //     },
-          //   });
-
-          //   Toast.fire({
-          //     icon: 'error',
-          //     title: response?.response?.data?.msg,
-          //   });
-          // }
+          if (response?.response?.data?.status === 'Fail') {
+            toast.error(response?.response?.data?.msg, {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+            });
+          }
         } catch (err) {
           console.log('authregisterErr =>', err);
         } finally {
@@ -177,7 +152,6 @@ const Register = () => {
       handleSubmit();
     },
   });
-
 
   useEffect(() => {}, []);
   return (
@@ -209,17 +183,8 @@ const Register = () => {
                       className={`text-[#C9D1D9] w-full py-[11px] text-[14px] text-center`}
                       selectedClassName={`bg-transparent border-b-[2px] border-b-[#00c29a] font-semibold`}
                     >
-                      <span className="hover:bg-[#222222] cursor-pointer hover:rounded transition-all ease-in-out px-[50px] w-full py-[5px]">
+                      <span className="hover:bg-[#222222] cursor-pointer hover:rounded transition-all ease-in-out px-[100px] w-full py-[5px]">
                         Pengguna
-                      </span>
-                    </Tab>
-
-                    <Tab
-                      className={`text-[#C9D1D9] w-full py-[11px] text-[14px] text-center`}
-                      selectedClassName={`bg-transparent border-b-[2px] border-b-[#00c29a] font-semibold`}
-                    >
-                      <span className="hover:bg-[#222222] cursor-pointer hover:rounded transition-all ease-in-out px-[50px] w-full py-[5px]">
-                        Administrator
                       </span>
                     </Tab>
                   </TabList>
@@ -228,7 +193,7 @@ const Register = () => {
                     <form
                       action=""
                       onSubmit={formikMasyarakat.handleSubmit}
-                      className="w-full space-y-5 mt-5"
+                      className="w-full space-y-7 mt-5"
                     >
                       <CustomInput
                         placeholder={'Nama Lengkap'}
@@ -351,7 +316,7 @@ const Register = () => {
                       </div>
                     </form>
                   </TabPanel>
-                  <TabPanel className={'w-full '}>
+                  {/* <TabPanel className={'w-full '}>
                     <form
                       action=""
                       className="space-y-5 mt-5 w-full"
@@ -471,7 +436,7 @@ const Register = () => {
                         />
                       </div>
                     </form>
-                  </TabPanel>
+                  </TabPanel> */}
                 </Tabs>
               </div>
             </div>

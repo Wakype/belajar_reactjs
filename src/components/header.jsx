@@ -1,12 +1,15 @@
 import React from 'react';
 import { FaUserAlt } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 const CustomHeader = ({
   username = 'Namalengkap | username',
   telp = '+62 84024937258',
 }) => {
+  const redux = useSelector((state) => state.auth);
+
   return (
     <section className="justify-between flex items-center h-full">
       <div className="flex items-center space-x-10">
@@ -35,8 +38,8 @@ const CustomHeader = ({
             <FaUserAlt />
           </div>
           <div>
-            <p className="text-[14px]">{username}</p>
-            <p className="text-[12px]">{telp}</p>
+            <p className="text-[14px]">{redux?.username} | {redux?.namaLengkap}</p>
+            <p className="text-[12px]">{redux?.telp}</p>
           </div>
         </div>
         <span className="w-[1px] h-[30px] bg-white"></span>

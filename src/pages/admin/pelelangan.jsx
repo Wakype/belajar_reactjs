@@ -1,35 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { CustomButton, CustomInput, SearchButton } from '../../components';
-import { deleteBarang, getBarang, getDetailBarang } from '../../api/barangApi';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import {
+  CustomButton,
+  CustomInput,
+  CustomSelect,
+  SearchButton,
+} from '../../components';
 import * as Yup from 'yup';
 import * as dayjs from 'dayjs';
-import rupiahFormat from 'rupiah-format';
-import { useQuery, useQueryClient } from 'react-query';
-import ScaleLoader from 'react-spinners/ScaleLoader';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
-import { actionUpdateBarang } from '../../redux/action/barangAction';
+import ScaleLoader from 'react-spinners/ScaleLoader';
+import { getLelang } from '../../api/lelangApi';
+import { actionUpdateStatus } from '../../redux/action/lelangActioon';
 import { BiLeftArrow, BiRightArrow } from 'react-icons/bi';
 
-const ListBarang = () => {
+const Pelelangan = () => {
+  let location = useLocation();
   const dispatch = useDispatch();
   const redux = useSelector((state) => state.auth);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = React.useState(false);
-  const [checkPage, setCheckPage] = useState('');
-  const [barang, setBarang] = useState([]);
   const convertRupiah = require('rupiah-format');
-  let navigate = useNavigate();
-  let location = useLocation();
+  const [lelang, setLelang] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [checkPage, setCheckPage] = useState('');
+  const [showModal, setShowModal] = React.useState(false);
+
   const [path1, path2, path3] = location.pathname.split('/').slice(1);
 
-  const handleGetBarang = async () => {
+  const getLelangHandle = async () => {
     try {
       setIsLoading(true);
-      let response = await getBarang(
+
+      let response = await getLelang(
         formikFilter.values.keyword,
         formikFilter.values.hargaMinimal,
         formikFilter.values.hargaMaximum,
@@ -37,54 +40,12 @@ const ListBarang = () => {
         formikFilter.values.page,
         formikFilter.values.pageSize
       );
-      console.log('barang', response);
-      setBarang(response?.data?.data?.rows);
+
+      console.log('lelang', response);
+      setLelang(response?.data?.data?.rows);
       setCheckPage(response?.data?.pagination?.totalData);
-      return response;
     } catch (err) {
-      console.log('barangerr', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const handleGetDetailBarang = async (id) => {
-    try {
-      setIsLoading(true);
-      let response = await getDetailBarang(id);
-
-      const dataBarang = response?.data?.data;
-      formik.setValues({
-        id: dataBarang.id,
-        namaBarang: dataBarang.namaBarang,
-        deskripsiBarang: dataBarang.deskripsiBarang,
-        hargaAwal: dataBarang.hargaAwal,
-      });
-      console.log('responnya', response);
-    } catch (err) {
-      console.log('barangerr', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDeleteBarang = async (id) => {
-    try {
-      setIsLoading(true);
-      let response = await deleteBarang(id);
-      toast.success(response?.data?.msg, {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-      });
-      handleGetBarang();
-      console.log('responnya', response);
-    } catch (err) {
-      console.log('barangerr', err);
+      console.log('lelangerr', err);
     } finally {
       setIsLoading(false);
     }
@@ -104,25 +65,17 @@ const ListBarang = () => {
   const formik = useFormik({
     initialValues: {
       id: '',
-      namaBarang: '',
-      deskripsiBarang: '',
-      hargaAwal: '',
+      status: '',
     },
     validationSchema: Yup.object().shape({
-      namaBarang: Yup.string()
-        .min(10, 'Nama Barang minimal 10 huruf')
-        .required('Nama Barang wajib diisi'),
-      deskripsiBarang: Yup.string()
-        .min(20, 'Deskripsi Barang minimal 20 huruf')
-        .required('Deskripsi Barang wajib diisi'),
-      hargaAwal: Yup.number()
-        .moreThan(1000, 'Harga harus lebih dari Rp1.000,-')
-        .required('Harga Awal wajib diisi'),
+      status: Yup.string()
+        .notOneOf(['Pilih Status'], 'Pilih status dengan benar')
+        .required('Status wajib diisi'),
     }),
     onSubmit: (values) => {
       const handleSubmit = async (e) => {
         try {
-          const response = await dispatch(actionUpdateBarang(values));
+          const response = await dispatch(actionUpdateStatus(values));
           console.log('responnya', response);
           if (response?.data?.status === 'Success') {
             toast.success(response?.data?.msg, {
@@ -136,7 +89,7 @@ const ListBarang = () => {
               theme: 'colored',
             });
             setShowModal(false);
-            return handleGetBarang();
+            return getLelangHandle();
           }
           if (response?.response?.data?.status === 'Fail') {
             toast.error(response?.response?.data?.msg, {
@@ -159,7 +112,7 @@ const ListBarang = () => {
     },
   });
   useEffect(() => {
-    handleGetBarang();
+    getLelangHandle();
   }, [formikFilter.values.page]);
   return (
     <section className="w-full h-screen bg-[#092742] py-[50px] px-[50px]">
@@ -175,27 +128,22 @@ const ListBarang = () => {
               <span className="text-[#00c29f]">{path3}</span>
             </p>
           </div>
-          <div className="flex space-x-5">
-            <div className="flex">
-              <SearchButton />
-            </div>
-            <NavLink to={`/${path1}/${path2}/${path3}/tambah-barang`}>
-              <CustomButton
-                label={'Tambah barang'}
-                stylingButton={'border-[#00c29f] hover:bg-[#00c29f]'}
-              />
-            </NavLink>
+
+          <div className="flex">
+            <SearchButton />
           </div>
         </div>
         <table class="table-auto w-full border border-[#00c29a] rounded">
           <tr className="border border-[#00c29a] h-[50px] rounded bg-[#00c29a]">
             <th className="w-[50px]">#</th>
+            <th className="w-[100px]">ID Barang</th>
             <th className="text-left">Gambar</th>
-            <th className="text-left">Nama Barang</th>
+            <th className="text-center">Petugas</th>
+            <th className="text-left ">Nama Barang</th>
             <th className="text-left">Tanggal Lelang</th>
-            <th className="text-left">Harga Awal</th>
-            <th className="text-left">Deskripsi Barang</th>
-            <th className="text-left">Aksi</th>
+            <th className="text-left">Harga Akhir</th>
+            <th className="text-left">Status</th>
+            <th className="text-center">Aksi</th>
           </tr>
 
           {isLoading ? (
@@ -210,7 +158,7 @@ const ListBarang = () => {
             </td>
           ) : (
             <>
-              {barang?.map((item, index) => {
+              {lelang?.map((item, index) => {
                 return (
                   <>
                     {showModal ? (
@@ -238,62 +186,20 @@ const ListBarang = () => {
                                   className="space-y-10 w-full"
                                   onSubmit={formik.handleSubmit}
                                 >
-                                  <CustomInput
-                                    placeholder={'Nama Barang'}
-                                    inputStyle={
+                                  <CustomSelect
+                                    id={'status'}
+                                    name={'status'}
+                                    value={formik.values.status}
+                                    onBlur={formik.handleBlur}
+                                    onChange={formik.handleChange}
+                                    selectStyle={
                                       'w-full border-[#00c29a] border bg-black'
                                     }
-                                    inputType={'text'}
-                                    id={'namaBarang'}
-                                    name={'namaBarang'}
-                                    value={formik.values.namaBarang}
-                                    onChange={formik.handleChange}
-                                    isError={
-                                      formik.touched.namaBarang &&
-                                      formik.errors.namaBarang
-                                    }
-                                    textError={formik.errors.namaBarang}
-                                    onBlur={formik.handleBlur}
-                                  />
-                                  <CustomInput
-                                    placeholder={'Deskripsi Barang'}
-                                    inputStyle={
-                                      'w-full border-[#00c29a] border bg-black'
-                                    }
-                                    inputType={'text'}
-                                    id={'deskripsiBarang'}
-                                    name={'deskripsiBarang'}
-                                    value={formik.values.deskripsiBarang}
-                                    onChange={formik.handleChange}
-                                    isError={
-                                      formik.touched.deskripsiBarang &&
-                                      formik.errors.deskripsiBarang
-                                    }
-                                    textError={formik.errors.deskripsiBarang}
-                                    onBlur={formik.handleBlur}
-                                  />
-                                  <div className="w-full flex space-x-3">
-                                    <div className="border border-[#00c29a] px-5 rounded bg-black flex items-center">
-                                      <p className="font-bold">Rp</p>
-                                    </div>
-                                    <CustomInput
-                                      placeholder={'Harga Awal'}
-                                      inputStyle={
-                                        'w-full border-[#00c29a] border bg-black'
-                                      }
-                                      inputType={'number'}
-                                      id={'hargaAwal'}
-                                      name={'hargaAwal'}
-                                      value={formik.values.hargaAwal}
-                                      onChange={formik.handleChange}
-                                      isError={
-                                        formik.touched.hargaAwal &&
-                                        formik.errors.hargaAwal
-                                      }
-                                      textError={formik.errors.hargaAwal}
-                                      onBlur={formik.handleBlur}
-                                    />
-                                  </div>
+                                  >
+                                    <option value="">Pilih Status</option>
+                                    <option value="dibuka">Dibuka</option>
+                                    <option value="ditutup">Ditutup</option>
+                                  </CustomSelect>
                                   <div className="flex space-x-10">
                                     <CustomButton
                                       onClick={() => setShowModal(false)}
@@ -318,12 +224,13 @@ const ListBarang = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="opacity-50 fixed inset-0 z-40 bg-black"></div>
+                        <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
                       </>
                     ) : null}
                     <tr key={index} className="mb-5">
                       <td className="text-center">{item.id}</td>
-                      <td className="w-[100px]">
+                      <td className="text-center">{item.barang.id}</td>
+                      <td className="w-[80px]">
                         <img
                           src="https://www.thewindowsclub.com/wp-content/uploads/2018/06/Broken-image-icon-in-Chrome.gif"
                           alt=""
@@ -331,46 +238,48 @@ const ListBarang = () => {
                           className="ml-5"
                         />
                       </td>
+                      <td className="text-center w-[120px]">
+                        {item.petugas.namaPetugas}
+                      </td>
                       <td>
-                        <p className="line-clamp-2 w-[250px]">
-                          {item.namaBarang}
+                        <p className="line-clamp-2 w-[200px]">
+                          {item.barang.namaBarang}
                         </p>
                       </td>
                       <td>{dayjs(item.tanggal).format('DD MMM YYYY')}</td>
-                      <td>{convertRupiah.convert(item.hargaAwal)}</td>
+                      <td>{convertRupiah.convert(item.hargaAkhir)}</td>
                       <td className="">
-                        <p className="w-[300px] line-clamp-2">
-                          {item.deskripsiBarang}
+                        <p
+                          className={`${
+                            item.status === 'dibuka'
+                              ? 'bg-green-500'
+                              : 'bg-red-500'
+                          } line-clamp-2 text-white rounded w-fit px-3`}
+                        >
+                          {item.status}
                         </p>
                       </td>
                       <td className="mb-5 ">
-                        {item?.id_petugas === redux?.id ? (
-                          <div className="flex pr-5 py-5 w-full justify-center space-x-3">
-                            <CustomButton
-                              onClick={() => handleDeleteBarang(item?.id)}
-                              label={'hapus'}
-                              stylingButton={
-                                'w-full border-red-500 hover:bg-red-500'
-                              }
-                            />
+                        <div className="flex pr-5 py-5 w-full justify-center space-x-3">
+                          {redux?.role === 'petugas' ? (
                             <CustomButton
                               onClick={() => {
-                                handleGetDetailBarang(item?.id);
+                                formik.setValues({
+                                  id: item?.id,
+                                });
 
                                 return setShowModal(true);
                               }}
-                              label={'Edit'}
+                              label={'Edit Status'}
                               stylingButton={
                                 'w-full border-yellow-500 hover:bg-yellow-500'
                               }
                             />
-                          </div>
-                        ) : (
-                          <div className="pr-5 py-5 w-full">
+                          ) : (
                             <CustomButton
                               onClick={() => {
                                 toast.error(
-                                  'Anda tidak bisa mengedit / menghapus karena ini bukan milik anda',
+                                  'Anda tidak bisa mengedit status karena anda bukan petugas',
                                   {
                                     position: 'top-right',
                                     autoClose: 2000,
@@ -384,13 +293,13 @@ const ListBarang = () => {
                                 );
                               }}
                               type={'button'}
-                              label={'Tidak bisa diedit / dihapus'}
+                              label={'Khusus Petugas'}
                               stylingButton={
-                                'w-full border-red-500 hover:bg-red-500 cursor-not-allowed'
+                                'w-[50%] border-red-500 hover:bg-red-500 cursor-not-allowed'
                               }
                             />
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </td>
                     </tr>
                   </>
@@ -472,4 +381,4 @@ const ListBarang = () => {
   );
 };
 
-export default ListBarang;
+export default Pelelangan;

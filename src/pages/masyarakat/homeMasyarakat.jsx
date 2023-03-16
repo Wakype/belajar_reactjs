@@ -1,8 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CardLelang, CustomButton, CustomHeader } from '../../components';
 import { NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import * as dayjs from 'dayjs';
+import { getBarang } from '../../api/barangApi';
+import { getLelang } from '../../api/lelangApi';
+const convertRupiah = require('rupiah-format');
 
 const HomeMasyarakat = () => {
+  const dispatch = useDispatch();
+  const redux = useSelector((state) => state.auth);
+  const [page, setPage] = useState(1);
+  const [barang, setBarang] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGetBarang = async () => {
+    try {
+      setIsLoading(true);
+      let response = await getLelang(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        8
+      );
+
+      setBarang(response?.data?.data?.rows);
+    } catch (err) {
+      console.log('barangerr', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleGetBarang();
+  }, []);
   return (
     <section className="">
       <header className="px-[30px] h-[85px] bg-black sticky top-0 z-50">
@@ -62,11 +96,28 @@ const HomeMasyarakat = () => {
             </NavLink>
           </div>
 
-          <div className="grid grid-cols-4 justify-items-center gap-x-[50px] gap-y-[20px]">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+          <div className="grid grid-cols-4 justify-items-center gap-x-[50px] gap-y-[50px]">
+            {barang.map((item, index) => {
               return (
                 <div key={index}>
-                  <CardLelang />
+                  <CardLelang
+                    id_lelang={item.id}
+                    id={item.barang.id}
+                    hargaAwal={convertRupiah.convert(item.barang.hargaAwal)}
+                    namaBarang={item.barang.namaBarang}
+                    status={
+                      item.status === 'dibuka' ? (
+                        <p className="text-white rounded bg-green-500 w-fit px-3 text-[14px] absolute right-3 top-3">{item.status}</p>
+                      ) : (
+                        <p className="text-white rounded bg-red-500 w-fit px-3 text-[14px] absolute right-3 top-3">{item.status}</p>
+                      )
+                    }
+                    tanggalLelang={dayjs(item.barang.tanggal).format(
+                      'DD MMM YYYY'
+                    )}
+                    namaUser={item.petugas.namaPetugas}
+                    hargaAkhir={convertRupiah.convert(item.hargaAkhir)}
+                  />
                 </div>
               );
             })}

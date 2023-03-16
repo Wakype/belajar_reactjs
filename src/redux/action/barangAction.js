@@ -1,6 +1,4 @@
-import Cookies from 'js-cookie';
-import { useSelector } from 'react-redux';
-import { tambahBarang } from '../../api/barangApi';
+import { tambahBarang, updateBarang } from '../../api/barangApi';
 
 export function actionTambahBarang(payload) {
   return async (dispatch) => {
@@ -10,6 +8,18 @@ export function actionTambahBarang(payload) {
       return response;
     } catch (err) {
       console.log('err actionTambahBarang', err);
+      return err;
+    }
+  };
+}
+export function actionUpdateBarang(payload) {
+  return async (dispatch) => {
+    try {
+      let response = await updateBarang(payload);
+      console.log('actionUpdateBarang', response);
+      return response;
+    } catch (err) {
+      console.log('err actionUpdateBarang', err);
       return err;
     }
   };

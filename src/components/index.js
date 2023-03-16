@@ -4,6 +4,7 @@ import CustomInput from "./customInput";
 import CustomSelect from "./customSelect";
 import CustomTextArea from "./customTextArea";
 import CustomHeader from "./header";
+import SearchButton from "./searchButton/searchButton";
 import SosmedLog from "./sosmedLog";
 
 export {
@@ -14,4 +15,5 @@ export {
   CustomSelect,
   CardLelang,
   CustomHeader,
+  SearchButton
 }

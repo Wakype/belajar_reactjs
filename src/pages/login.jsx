@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
 import { authLogin } from '../redux/action/authAction';
 import { toast } from 'react-toastify';
+import ScaleLoader from 'react-spinners/ScaleLoader';
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,27 +32,19 @@ const Login = () => {
       const handleSubmit = async (e) => {
         try {
           setIsLoading(true);
-          // alert(JSON.stringify(values, null, 2));
-
           const response = await dispatch(authLogin(values));
           console.log('responnya', response);
           console.log('nama', values.username);
           if (response?.status === 'Success') {
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-              },
-            });
-
-            Toast.fire({
-              icon: 'success',
-              title: response?.msg,
+            toast.success(response?.msg, {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
             });
 
             if (response?.user?.id_level === undefined) {
@@ -127,7 +120,11 @@ const Login = () => {
               <div className="space-y-3 w-[400px]">
                 <CustomInput
                   placeholder={'Username'}
-                  inputStyle={`w-full ${formik.touched.username && formik.errors.username ? 'bg-red-500 opacity-80' : undefined}`}
+                  inputStyle={`w-full ${
+                    formik.touched.username && formik.errors.username
+                      ? 'bg-[#ff2c2ca2]'
+                      : undefined
+                  }`}
                   inputType={'username'}
                   id={'username'}
                   name={'username'}
@@ -144,14 +141,24 @@ const Login = () => {
                   onChange={formik.handleChange}
                   isError={formik.touched.password && formik.errors.password}
                   textError={formik.errors.password}
-                  inputStyle={'w-full'}
+                  inputStyle={`w-full ${
+                    formik.touched.password && formik.errors.password
+                      ? 'bg-[#ff2c2ca2]'
+                      : undefined
+                  }`}
                   id={'password'}
                   name={'password'}
                   inputType={'password'}
                 />
                 <CustomButton
                   type={'submit'}
-                  label={'Login'}
+                  label={
+                    isLoading ? (
+                      <ScaleLoader color="black" height={10} width={7} />
+                    ) : (
+                      'Login'
+                    )
+                  }
                   stylingP={'text-black'}
                   stylingButton={
                     'w-full py-4 border-none bg-gradient-to-r from-[#00c29a] to-[#e8cd70] hover:to-[#00c29a] hover:from-[#e8cd70]'

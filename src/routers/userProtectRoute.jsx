@@ -6,7 +6,7 @@ import { authMe } from '../redux/action/authAction';
 import { syncToken } from '../api/baseUrl';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 
-export default function ProtectRoute({ children }) {
+export default function UserProtectRoute({ children }) {
   const role = useSelector((state) => state.auth.role);
   const auth = Cookies.get('myapps_token');
   const isAuth = useSelector((state) => state?.auth?.isAuth);
@@ -44,16 +44,8 @@ export default function ProtectRoute({ children }) {
     );
   } else {
     console.log('auth =>', auth);
-    console.log('role', role)
+    console.log('role', role);
 
-    if (role === 'administrator' || role === 'petugas') {
-      return auth !== undefined ? children : <Navigate to="/login" />;
-    } else {
-      return auth !== undefined ? (
-        <Navigate to="/beranda" />
-      ) : (
-        <Navigate to="/login" />
-      );
-    }
+    return auth !== undefined ? children : <Navigate to="/login" />;
   }
 }

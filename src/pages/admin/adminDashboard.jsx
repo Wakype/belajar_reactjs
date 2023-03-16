@@ -1,8 +1,11 @@
 import React from 'react';
+import { FaUserAlt } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
+  const redux = useSelector((state) => state.auth);
   let navigate = useNavigate();
   let location = useLocation();
   let path1 = location.pathname.split('/')[1];
@@ -27,7 +30,7 @@ const AdminDashboard = () => {
                   path3 === 'barang' ? 'text-black bg-[#00c29a]' : undefined
                 }`}
               >
-                Pendataan Barang
+                Data Barang
               </p>
             </NavLink>
             <NavLink to={`/${path1}/${path2}/petugas`}>
@@ -48,11 +51,30 @@ const AdminDashboard = () => {
                 Laporan
               </p>
             </NavLink>
+            <NavLink to={`/${path1}/${path2}/pelelangan`}>
+              <p
+                className={`hover:text-black py-2 px-5 cursor-pointer hover:bg-[#00c29a] rounded ${
+                  path3 === 'pelelangan' ? 'text-black bg-[#00c29a]' : undefined
+                }`}
+              >
+                Pelelangan
+              </p>
+            </NavLink>
           </div>
         </div>
 
-        <div className="px-5 cursor-pointer">
-          <NavLink to={'/login'} replace={true}>
+        <div className="px-5">
+          <div className='flex items-center space-x-3 rounded border border-[#00c29a] p-3 mb-[50px]'>
+            <div className="w-[35px] h-[35px] rounded-full bg-[#00c29a] flex items-center justify-center">
+              <FaUserAlt />
+            </div>
+            <div className='w-full'>
+              <p>{redux?.username}</p>
+              <div className='w-full h-[2px] bg-[#00c29a]'></div>
+              <p>{redux?.role}</p>
+            </div>
+          </div>
+          <NavLink to={'/login'} replace={true} className={'cursor-pointer'}>
             <div className="flex items-center space-x-2 border border-red-500 rounded py-1 justify-center transition-all ease-in-out hover:bg-red-500 hover:border-red-500">
               <FiLogOut color="white" size={20} />
               <p className="transition-all ease-in-out">Logout</p>
