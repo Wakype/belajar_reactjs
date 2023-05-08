@@ -3,17 +3,15 @@ import {
   combineReducers,
   applyMiddleware,
   compose,
-} from "redux";
-import { logger } from "../middleware/logger";
-import { authProcess } from "../reducers/authReducer";
-import thunk from "redux-thunk";
+} from 'redux';
+import { logger } from '../middleware/logger';
 
-let allReducers = combineReducers({
-  auth: authProcess
-});
+import thunk from 'redux-thunk';
+
+let allReducers = combineReducers({});
 
 const composeEnhancers =
-  (typeof window !== "undefined" &&
+  (typeof window !== 'undefined' &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
   compose;
 
